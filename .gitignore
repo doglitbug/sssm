@@ -1,0 +1,5 @@
+#Vagrant specific
+.vagrant/
+
+#Connection vars
+public/scripts/connectvars.php
