@@ -2,7 +2,7 @@
 require_once('scripts/header.php');
 ?>
 
-<h1>3SM - Simple Staff Schedule Management</h1>
+<h1>SSSM - Simple Staff Schedule Management</h1>
 <div class="container">
 	<img src="http://lorempixel.com/output/abstract-q-c-320-240-7.jpg" class="img-responsive hidden-xs" style="float:left; margin: 0 20px 20px 0px"/>
 	<p>Bacon ipsum dolor amet qui jerky kevin brisket. Shoulder aute t-bone cillum short loin. Chicken aliquip in corned beef id duis ad alcatra. Anim ut sausage est andouille nulla cupim fatback consequat eiusmod ball tip. Veniam tempor tongue ball tip, bacon tail consequat spare ribs.</p>

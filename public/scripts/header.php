@@ -13,7 +13,7 @@
 		if (isset($title)){
 			echo $title;
 		} else {
-			echo "3SM";
+			echo "SSSM";
 		}
 		?>
 		</title>
