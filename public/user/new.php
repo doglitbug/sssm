@@ -68,6 +68,20 @@ if (isset($_POST['submit'])){
 
 	}
 
+	//Check email hasn't already been used
+	$query = "SELECT email FROM tbl_contact WHERE email='$email' LIMIT 1";
+
+	//Grab result
+	$result = mysqli_query($dbc, $query);
+
+	//Grab rows
+	$row = mysqli_fetch_array($result);
+
+	//Check if email was found
+	if (mysqli_num_rows($result)!=0){
+		$email_error="Email already taken, please choose another";
+	}
+
 	//Check email address have been entered and that they match!
 	if(!empty($email) && !empty($email1) && ($email!=$email1)){
 		$email1_error="Please make sure email addresses match";
