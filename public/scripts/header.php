@@ -1,3 +1,12 @@
+<?php
+//Start the session
+require_once('startsession.php');
+
+//Set up vars for database connection
+require_once('connectvars.php');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
