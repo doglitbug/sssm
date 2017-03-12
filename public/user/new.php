@@ -19,6 +19,8 @@ if (isset($_POST['submit'])){
 	$lastname  = mysqli_real_escape_string($dbc, trim($_POST['lastname']));
 	$email     = mysqli_real_escape_string($dbc, trim($_POST['email']));
 	$email1    = mysqli_real_escape_string($dbc, trim($_POST['email1']));
+	$password  = mysqli_real_escape_string($dbc, trim($_POST['password']));
+	$password1 = mysqli_real_escape_string($dbc, trim($_POST['password1']));
 
 	//Check username is valid
 	if (empty($username)){
@@ -77,24 +79,31 @@ if (isset($_POST['submit'])){
 	if(empty($password)){
 		$password_error="Please enter a password";
 	} else {
-		//Check length
+			//Check length
 		if (strlen($password)<8){
 			$password_error="Please choose a longer password";
+		} else {
+					//Check password1 has been entered
+			if(empty($password1)){
+				$password1_error="Please repeat password";
+			} else {
+							//Check passwords match
+				if ($password!=$password1){
+					$password1_error = "Passwords do not match";
+				}
+			}
 		}
 	}
-
-	//Check password1 has been entered
-	if(!empty($password1)){
-		$password1="Please repeat password";
-	}
-
-	//Check passwords match
-	if ($password!=$password1){
-		$password1_error = "Passwords do not match";
+	////////// Check to see if all data is valid and if so, make a new user //////////
+	if (($username_error . $firstname_error . $lastname_error . $email_error . $email1_error . $password_error . $password1_error) == ""){
+		//TODO Create a new user
+		echo "New user created";
+		//TODO Head back to previous page
+		require_once('../scripts/footer.php');
+		die();
 	}
 }
 ?>
-
 <h1><?php echo $title;?></h1>
 	<form method="post" action="#">
 		<div class="form-group">
@@ -129,13 +138,13 @@ if (isset($_POST['submit'])){
 
 		<div class="form-group">
 			<label for="password">Password</label>
-			<input type="password" class="form-control" id="password"/>
+			<input type="password" class="form-control" id="password" name="password"/>
 			<div class="error"><?php echo $password_error;?></div>
 		</div>
 
 		<div class="form-group">
 			<label for="password1">Confirm Password</label>
-			<input type="password" class="form-control" id="password1"/>
+			<input type="password" class="form-control" id="password1" name="password1"/>
 			<div class="error"><?php echo $password1_error;?></div>
 		</div>
 
