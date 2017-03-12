@@ -49,7 +49,26 @@ if (isset($_POST['submit'])){
 		$lastname_error="Please enter a last name";
 	}
 
+	//Check email address has been entered
+	if(empty($email)){
+		$email_error="Please enter an email address";
+	} else {
+		//Check valid(form should take care of this but yeah, checks...)
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+			$email_error="Please enter a valid email address";
+		}
+	}
 
+	//Check email1 address has been entered
+	if(empty($email1)){
+		$email1_error="Please repeat email address";
+
+	}
+
+	//Check email address have been entered and that they match!
+	if(!empty($email) && !empty($email1) && ($email!=$email1)){
+		$email1_error="Please make sure email addresses match";
+	}
 }
 ?>
 
@@ -76,11 +95,13 @@ if (isset($_POST['submit'])){
 		<div class="form-group">
 			<label for="email">Email address</label>
 			<input type="email" class="form-control" id="email" placeholder="Email address" name="email" value="<?php echo $email;?>"/>
+			<div class="error"><?php echo $email_error;?></div>
 		</div>
 
 		<div class="form-group">
 			<label for="email1">Repeat email address</label>
 			<input type="email" class="form-control" id="email1" placeholder="Email address" name="email1" value="<?php echo $email1;?>"/>
+			<div class="error"><?php echo $email1_error;?></div>
 		</div>
 
 		<div class="form-group">
