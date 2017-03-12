@@ -9,7 +9,7 @@ $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 $username = $firstname = $lastname = $email = $email1 = "";
 
 //Set error vars
-$username_error = $firstname_error = $lastname_error = $email_error = $email1_error = "";
+$username_error = $firstname_error = $lastname_error = $email_error = $email1_error = $password_error = $password1_error = "";
 
 //Check to see if form has been submitted
 if (isset($_POST['submit'])){
@@ -49,6 +49,7 @@ if (isset($_POST['submit'])){
 		$lastname_error="Please enter a last name";
 	}
 
+	////////// Email validation and checks //////////
 	//Check email address has been entered
 	if(empty($email)){
 		$email_error="Please enter an email address";
@@ -68,6 +69,28 @@ if (isset($_POST['submit'])){
 	//Check email address have been entered and that they match!
 	if(!empty($email) && !empty($email1) && ($email!=$email1)){
 		$email1_error="Please make sure email addresses match";
+	}
+
+	////////// Password checks //////////
+	//TODO Check length etc
+	//Check password has been entered
+	if(empty($password)){
+		$password_error="Please enter a password";
+	} else {
+		//Check length
+		if (strlen($password)<8){
+			$password_error="Please choose a longer password";
+		}
+	}
+
+	//Check password1 has been entered
+	if(!empty($password1)){
+		$password1="Please repeat password";
+	}
+
+	//Check passwords match
+	if ($password!=$password1){
+		$password1_error = "Passwords do not match";
 	}
 }
 ?>
@@ -99,7 +122,7 @@ if (isset($_POST['submit'])){
 		</div>
 
 		<div class="form-group">
-			<label for="email1">Repeat email address</label>
+			<label for="email1">Confirm email address</label>
 			<input type="email" class="form-control" id="email1" placeholder="Email address" name="email1" value="<?php echo $email1;?>"/>
 			<div class="error"><?php echo $email1_error;?></div>
 		</div>
@@ -107,11 +130,13 @@ if (isset($_POST['submit'])){
 		<div class="form-group">
 			<label for="password">Password</label>
 			<input type="password" class="form-control" id="password"/>
+			<div class="error"><?php echo $password_error;?></div>
 		</div>
 
 		<div class="form-group">
-			<label for="password1">Reenter Password</label>
+			<label for="password1">Confirm Password</label>
 			<input type="password" class="form-control" id="password1"/>
+			<div class="error"><?php echo $password1_error;?></div>
 		</div>
 
 		<button type="submit" name="submit" class="btn btn-default">Register</button>
