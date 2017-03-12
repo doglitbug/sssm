@@ -6,7 +6,7 @@ require_once('../scripts/startsession.php');
 //Set up vars for database connection
 require_once('../scripts/connectvars.php');
 
-//connect to database
+//Connect to database
 $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //Get username parameter from URL
