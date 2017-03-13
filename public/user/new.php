@@ -173,13 +173,13 @@ if (isset($_POST['submit'])){
 
 		<div class="form-group">
 			<label for="password">Password</label>
-			<input type="password" class="form-control" id="password" name="password"/>
+			<input type="password" class="form-control" id="password" placeholder="Password" name="password"/>
 			<div class="error"><?php echo $password_error;?></div>
 		</div>
 
 		<div class="form-group">
 			<label for="password1">Confirm Password</label>
-			<input type="password" class="form-control" id="password1" name="password1"/>
+			<input type="password" class="form-control" id="password1" placeholder="Reenter password" name="password1"/>
 			<div class="error"><?php echo $password1_error;?></div>
 		</div>
 
