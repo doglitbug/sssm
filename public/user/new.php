@@ -30,7 +30,7 @@ if (isset($_POST['submit'])){
 		$query = "SELECT username FROM tbl_user WHERE username='$username' LIMIT 1";
 
 		//Grab result
-		$result = mysqli_query($dbc, $query);
+		$result = mysqli_query($dbc, $query) or die('Couldn\'t search for username: ') . mysqli_error($dbc);;
 
 		//Grab rows
 		$row = mysqli_fetch_array($result);
@@ -72,7 +72,7 @@ if (isset($_POST['submit'])){
 	$query = "SELECT email FROM tbl_contact WHERE email='$email' LIMIT 1";
 
 	//Grab result
-	$result = mysqli_query($dbc, $query);
+	$result = mysqli_query($dbc, $query) or die('Couldn\'t search for email: ') . mysqli_error($dbc);;
 
 	//Grab rows
 	$row = mysqli_fetch_array($result);
@@ -88,7 +88,6 @@ if (isset($_POST['submit'])){
 	}
 
 	////////// Password checks //////////
-	//TODO Check length etc
 	//Check password has been entered
 	if(empty($password)){
 		$password_error="Please enter a password";
@@ -110,9 +109,31 @@ if (isset($_POST['submit'])){
 	}
 	////////// Check to see if all data is valid and if so, make a new user //////////
 	if (($username_error . $firstname_error . $lastname_error . $email_error . $email1_error . $password_error . $password1_error) == ""){
-		//TODO Create a new user
-		echo "New user created";
-		//TODO Head back to previous page
+
+		//Encrpyt password
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+		//Build query to create user
+		$query = "INSERT INTO tbl_user (username, password, firstname, lastname) VALUES ('$username', '$hashed_password', '$firstname', '$lastname')";
+
+		//Insert user
+		mysqli_query($dbc, $query) or die('Couldn\'t add new user: ') . mysqli_error($dbc);
+
+		//Get id of new user
+		$user_id = mysqli_insert_id($dbc);
+
+		//Build query to create user contact
+		$query = "INSERT INTO tbl_contact (user_id, email) VALUES ('$user_id', '$email')";
+
+		//Insert contact details
+		mysqli_query($dbc, $query) or die('Couldn\'t add new users contact details: ') . mysqli_error($dbc);
+
+		?>
+		<h1><?php echo $title;?></h1>
+		<div class="container">
+			<p>New user has been added to the system. Click <a href="../index.php">here</a> to go back.</p>
+		</div>
+		<?php
 		require_once('../scripts/footer.php');
 		die();
 	}
