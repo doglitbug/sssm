@@ -1,5 +1,6 @@
 <?php
 $title = "New user registration";
+$login = true;
 require_once('../scripts/header.php');
 
 //Connect to database

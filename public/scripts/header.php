@@ -34,3 +34,16 @@ require_once('connectvars.php');
 	</head>
 	<body>
 		<div class="container">
+
+<?php
+//Check if login is required and not logged in
+if (isset($login) && $login == true && !isset($_SESSION['username'])){
+	echo "<h1>Login required</h1>\n";
+	echo "<ul>\n";
+	echo "<li><a href='../user/login.php'>Click here to log in</a></li>\n";
+	echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
+	echo "</ul>\n";
+	require_once('footer.php');
+	die();
+}
+?>
