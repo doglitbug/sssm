@@ -4,7 +4,8 @@ require_once('../scripts/header.php');
 
 //Check not already logged in!
 if (isset($_SESSION['username'])){
-	echo "<p>Already logged in as ".$_SESSION['username']."!</p>";
+	echo "<p>Already logged in as ".$_SESSION['username']."!</p>\n";
+	echo "<a href='../index.php'>Click here to return to main page</a>\n";
 	require_once('../scripts/footer.php');
 	//TODO redirect user
 	die();
@@ -47,7 +48,8 @@ if (isset($_POST['submit'])){
 			$_SESSION['manager']=$row['manager'];
 
 			//TODO redirect user
-			echo "<p>Login correct</p>";
+			echo "<h1>Logged in</h1>\n";
+			echo "<a href='../index.php'>Click here to return to main page</a>\n";
 			require_once('../scripts/footer.php');
 			die();
 		} else {
