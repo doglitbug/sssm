@@ -2,6 +2,14 @@
 $title = "Log in";
 require_once('../scripts/header.php');
 
+//Check not already logged in!
+if (isset($_SESSION['username'])){
+	echo "<p>Already logged in as ".$_SESSION['username']."!</p>";
+	require_once('../scripts/footer.php');
+	//TODO redirect user
+	die();
+
+}
 //Connect to database
 $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
@@ -54,7 +62,7 @@ if (isset($_POST['submit'])){
 <form method="post" action="#">
 	<div class="form-group">
 		<label for="username">Username</label>
-		<input type="text" class="form-control" id="username" placeholder="Username" name="username"/>
+		<input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username;?>"/>
 		<div class="error"><?php echo $username_error;?></div>		
 	</div>
 
