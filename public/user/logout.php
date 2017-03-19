@@ -2,6 +2,7 @@
 $title = "Log out";
 require_once('../scripts/header.php');
 
+//Don't bother checking if already logged in, just log out anyway
 unset($_SESSION);
 session_destroy();
 session_write_close();

@@ -46,4 +46,13 @@ if (isset($login) && $login == true && !isset($_SESSION['username'])){
 	require_once('footer.php');
 	die();
 }
+
+if (isset($manager) && $manager == true && (!isset($_SESSION['manager']) || $_SESSION['manager']!='1')){
+	echo "<h1>Manager access required</h1>\n";
+	echo "<ul>\n";
+	echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
+	echo "</ul>\n";
+	require_once('footer.php');
+	die();
+}
 ?>
