@@ -7,7 +7,7 @@ require_once('../scripts/header.php');
 $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //Set vars for sticky form
-$username = $firstname = $lastname = $email = $email1 = "";
+$username = $manager = $firstname = $lastname = $email = $email1 = "";
 
 //Set error vars
 $username_error = $firstname_error = $lastname_error = $email_error = $email1_error = $password_error = $password1_error = "";
@@ -16,6 +16,7 @@ $username_error = $firstname_error = $lastname_error = $email_error = $email1_er
 if (isset($_POST['submit'])){
 	//Grab previous data
 	$username  = mysqli_real_escape_string($dbc, trim($_POST['username']));
+	$manager   = mysqli_real_escape_string($dbc, trim(isset($_POST['manager'])?$_POST['manager']:'0'));
 	$firstname = mysqli_real_escape_string($dbc, trim($_POST['firstname']));
 	$lastname  = mysqli_real_escape_string($dbc, trim($_POST['lastname']));
 	$email     = mysqli_real_escape_string($dbc, trim($_POST['email']));
@@ -115,7 +116,7 @@ if (isset($_POST['submit'])){
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 		//Build query to create user
-		$query = "INSERT INTO tbl_user (username, password, firstname, lastname) VALUES ('$username', '$hashed_password', '$firstname', '$lastname')";
+		$query = "INSERT INTO tbl_user (username, password, firstname, lastname, manager) VALUES ('$username', '$hashed_password', '$firstname', '$lastname', '$manager')";
 
 		//Insert user
 		mysqli_query($dbc, $query) or die('Couldn\'t add new user: ') . mysqli_error($dbc);
@@ -148,7 +149,11 @@ if (isset($_POST['submit'])){
 				<input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username;?>"/>
 				<div class="error"><?php echo $username_error;?></div>
 			</div>
-			<div class="col-md-6 hidden-xs"></div>
+
+			<div class="col-md-6">
+				<label for="manager">Manager</label>
+				<input type="checkbox" class="form-check-input" id="manager" name="manager" value="1" <?php if ($manager=='1') echo "checked";?>/>
+			</div>
 		</div>
 
 		<div class="form-group container">
