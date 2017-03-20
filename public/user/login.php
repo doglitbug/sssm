@@ -42,7 +42,7 @@ if (isset($_POST['submit'])){
 		//Check if username was found, then that the password is correct
 		if (mysqli_num_rows($result)!=0 && (password_verify($password, $row['password']))){
 			//Log in user
-			$_SESSION['id']=$row['id'];
+			$_SESSION['user_id']=$row['user_id'];
 			$_SESSION['username']=$row['username'];
 			$_SESSION['firstname']=$row['firstname'];
 			$_SESSION['manager']=$row['manager'];
