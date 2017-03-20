@@ -142,49 +142,62 @@ if (isset($_POST['submit'])){
 ?>
 <h1><?php echo $title;?></h1>
 	<form method="post" action="#">
-		<div class="form-group">
-			<label for="username">Username</label>
-			<input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username;?>"/>
-			<div class="error"><?php echo $username_error;?></div>
+		<div class="form-group container">
+			<div class="col-md-6">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username;?>"/>
+				<div class="error"><?php echo $username_error;?></div>
+			</div>
+			<div class="col-md-6 hidden-xs"></div>
 		</div>
 
-		<div class="form-group">
-			<label for="firstname">First name</label>
-			<input type="text" class="form-control" id="firstname" placeholder="First name" name="firstname" value="<?php echo $firstname;?>"/>
-			<div class="error"><?php echo $firstname_error;?></div>
+		<div class="form-group container">
+			<div class="col-md-6">
+				<label for="firstname">First name</label>
+				<input type="text" class="form-control" id="firstname" placeholder="First name" name="firstname" value="<?php echo $firstname;?>"/>
+				<div class="error"><?php echo $firstname_error;?></div>
+			</div>
+		
+			<div class="form-group col-md-6">
+				<label for="lastname">Last name</label>
+				<input type="text" class="form-control" id="lastname" placeholder="Last name" name="lastname" value="<?php echo $lastname;?>"/>
+				<div class="error"><?php echo $lastname_error;?></div>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="lastname">Last name</label>
-			<input type="text" class="form-control" id="lastname" placeholder="Last name" name="lastname" value="<?php echo $lastname;?>"/>
-			<div class="error"><?php echo $lastname_error;?></div>
+		<div class="form-group container">
+			<div class="col-md-6">
+				<label for="email">Email address</label>
+				<input type="email" class="form-control" id="email" placeholder="Email address" name="email" value="<?php echo $email;?>"/>
+				<div class="error"><?php echo $email_error;?></div>
+			</div>
+
+			<div class="col-md-6">
+				<label for="email1">Confirm email address</label>
+				<input type="email" class="form-control" id="email1" placeholder="Email address" name="email1" value="<?php echo $email1;?>"/>
+				<div class="error"><?php echo $email1_error;?></div>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="email">Email address</label>
-			<input type="email" class="form-control" id="email" placeholder="Email address" name="email" value="<?php echo $email;?>"/>
-			<div class="error"><?php echo $email_error;?></div>
+		<div class="form-group container">
+			<div class="col-md-6">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" placeholder="Password" name="password"/>
+				<div class="error"><?php echo $password_error;?></div>
+			</div>
+
+			<div class="col-md-6">
+				<label for="password1">Confirm Password</label>
+				<input type="password" class="form-control" id="password1" placeholder="Reenter password" name="password1"/>
+				<div class="error"><?php echo $password1_error;?></div>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="email1">Confirm email address</label>
-			<input type="email" class="form-control" id="email1" placeholder="Email address" name="email1" value="<?php echo $email1;?>"/>
-			<div class="error"><?php echo $email1_error;?></div>
+		<div class="form-group container">
+			<div class="container">
+				<button type="submit" name="submit" class="btn btn-default">Register</button>
+			</div>
 		</div>
-
-		<div class="form-group">
-			<label for="password">Password</label>
-			<input type="password" class="form-control" id="password" placeholder="Password" name="password"/>
-			<div class="error"><?php echo $password_error;?></div>
-		</div>
-
-		<div class="form-group">
-			<label for="password1">Confirm Password</label>
-			<input type="password" class="form-control" id="password1" placeholder="Reenter password" name="password1"/>
-			<div class="error"><?php echo $password1_error;?></div>
-		</div>
-
-		<button type="submit" name="submit" class="btn btn-default">Register</button>
 	</form>
 
 <?php
