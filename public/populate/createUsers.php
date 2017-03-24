@@ -9,11 +9,23 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
 //TODO Delete previous users
 
-createUser("1","doglitbug","password","Arron","Dick","1","s_drac2@yahoo.com");
-createUserContact("1","0273655228","","doglitbug","cellphone");
+////////// Create two users, one manager one not //////////
+//createUser("1","doglitbug","password","Arron","Dick","1","s_drac2@yahoo.com");
+//createUserContact("1","0273655228","","doglitbug","cellphone");
 
-createUser("2","arthur","password","Arthur","Gumball","0","agumball@email.com");
-createUserContact("2","02112345678","034132152","a.gumball","cellphone");
+//createUser("2","arthur","password","Arthur","Gumball","0","agumball@email.com");
+//createUserContact("2","02112345678","034132152","a.gumball","cellphone");
+
+////////// Create some schedule data for users //////////
+$today = date("Y-m-d");
+$monday_of_week = getMondayOfWeek($today);
+echo $today;
+echo "<br/>";
+echo date("Y-m-d", $monday_of_week);
+
+//Friday afternoon all year
+//createSchedule(1, "2016-01-06","16:00","24:00",0,"Looking after Samuel");
+
 
 //Turn back on the key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 1');
@@ -46,5 +58,34 @@ function createUserContact($user_id, $cellphone, $landline, $facebook, $preferre
 	echo "Created contact details<br/>\n";
 }
 
+function createSchedule($user_id, $start_date, $start_time, $end_time, $occurrences, $description){
+	//Reformat times
+	$start_time.=":00";
+	$end_time  .=":00";
+	//Dates can be provided as yyyy-mm-dd
+
+	//Build query	
+	$query = "INSERT INTO tbl_schedule (user_id, start_date, start_time, end_time, occurrences, description) VALUES ('$user_id', '$start_date', '$start_time', '$end_time', '$occurrences', '$description')";
+
+	//Insert new schedule
+	mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t add new schedule: ' . mysqli_error($GLOBALS['dbc']));
+
+	echo "Created schedule:<br/>\n";
+}
+
+/**
+* Find the monday(default start) of the week in which the given date falls
+* http://stackoverflow.com/questions/11771062/when-a-date-is-given-how-to-get-the-date-of-monday-of-that-week-in-php
+* @param $date Date of the given week
+* @returns Closest proceeding Monday, if not already a Monday
+**/
+function getMondayOfWeek($date){
+	if (!is_numeric($date))
+        $date = strtotime($date);
+    if (date('w', $date) == 1)
+        return $date;
+    else
+        return strtotime('last monday',$date);
+}
 require_once('../scripts/footer.php');
 ?>
