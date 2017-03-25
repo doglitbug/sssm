@@ -19,13 +19,22 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 ////////// Create some schedule data for users //////////
 $today = date("Y-m-d");
 $monday_of_week = getMondayOfWeek($today);
+//$tuesday_of_week = strtotime($monday_of_week
 echo $today;
 echo "<br/>";
 echo date("Y-m-d", $monday_of_week);
+echo "<br/>";
 
-//Friday afternoon all year
+//Friday afternoon to saturday night all year
 //createSchedule(1, "2016-01-06","16:00","24:00",0,"Looking after Samuel");
+//createSchedule(1, "2016-01-07","00:00","17:40",0,"Looking after Samuel");
 
+//Add a class on monday this week
+//createSchedule(1,date("Y-m-d",$monday_of_week),"08:00","10:00",1,"Computer class");
+//createSchedule(1,date("Y-m-d",$monday_of_week),"12:00","14:00",1,"Computer class");
+
+//Add a exam next week on tuesday
+createSchedule(1,date("Y-m-d",strtotime("+8 day",$monday_of_week)),"10:00","12:00",1,"Computer exam");
 
 //Turn back on the key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 1');
