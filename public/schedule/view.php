@@ -14,6 +14,7 @@ $user_id = $_SESSION['user_id'];
 $start_date = date("Y-m-d",getmondayOfWeek(date("Y-m-d")));
 $end_date   = date("Y-m-d",strtotime("+1 week",getmondayOfWeek(date("Y-m-d"))));
 //TODO span: day, week, month, 7 day. Default week
+//TODO The ordering of the events is gonna really screw up when other than 7 days...
 $span = 7;
 
 //TODO Check to see if user is trying to view a different user without being a manager
@@ -30,14 +31,21 @@ $result = mysqli_query($dbc, $query) or die('Error getting schedule data: ' . my
 if (mysqli_num_rows($result) == 0){
 	echo "<div>User has no schedule events for this time</div><br/>";
 } else {
+	$last_day_of_week=-1;
 	while ($row = mysqli_fetch_array($result)) {
 		//TODO Calculate this events actual date
 		//date("Y-m-d",strtotime("+8 day",$monday_of_week))
 		
-		//Get day of week(seeing as we cant figure out the date as yet)
-		$day_of_week=date('l', strtotime($row['start_date']));
+		//Find out if we need to print a new weekday header
 
-		echo "<h2>$day_of_week</h2>\n";
+		$day_of_week=date('w', strtotime($row['start_date']));
+		//If it has changed from the last one printed...
+		if($day_of_week!=$last_day_of_week){
+			$last_day_of_week=$day_of_week;
+
+			echo "<h2>".date('l', strtotime($row['start_date']))."</h2>\n";
+		}
+
 		echo "Time: ".$row['start_time']." - ".$row['end_time']."<br/>\n";
 		echo $row['description']."<br/>\n";
 	}
