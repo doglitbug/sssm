@@ -11,18 +11,19 @@ $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 $user_id = $_SESSION['user_id'];
 
 //TODO date, default today/monday
-$date = getmondayOfWeek(date("Y-m-d"));
-
+$start_date = date("Y-m-d",getmondayOfWeek(date("Y-m-d")));
+$end_date   = date("Y-m-d",strtotime("+1 week",getmondayOfWeek(date("Y-m-d"))));
 //TODO span: day, week, month, 7 day. Default week
 $span = 7;
 
 //TODO Check to see if user is trying to view a different user without being a manager
 
 //Build query
+
 $query = "SELECT * FROM tbl_schedule 
-WHERE user_id='1' AND start_date<='2017-04-02' AND 
-(occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='2017-03-27'))
-ORDER BY DAYOFWEEK(start_date)";
+WHERE user_id='1' AND start_date<='$end_date' AND 
+(occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='$start_date'))
+ORDER BY (case DAYOFWEEK(start_date) WHEN 1 THEN 8 else DAYOFWEEK(start_date) END), start_time";
 
 $result = mysqli_query($dbc, $query) or die('Error getting schedule data: ' . mysqli_error($dbc));
 
