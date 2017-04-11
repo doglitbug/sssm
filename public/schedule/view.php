@@ -37,7 +37,6 @@ if (mysqli_num_rows($result) == 0){
 		//date("Y-m-d",strtotime("+8 day",$monday_of_week))
 		
 		//Find out if we need to print a new weekday header
-
 		$day_of_week=date('w', strtotime($row['start_date']));
 		//If it has changed from the last one printed...
 		if($day_of_week!=$last_day_of_week){
@@ -53,6 +52,7 @@ if (mysqli_num_rows($result) == 0){
 
 ?>
 <!-- TODO View schedule etc -->
+
 <?php
 require_once('../scripts/footer.php');
 

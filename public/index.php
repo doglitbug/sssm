@@ -9,6 +9,7 @@ require_once('scripts/header.php');
 	<li><a href="user/new.php">Add a new user</a></li>
 	<li><a href="user/login.php">Log in</a></li>
 	<li><a href="user/logout.php">Log out</a></li>
+	<li><a href="schedule/view.php">View current weeks schedule</a></li>
 	</ul>
 	</p>
 	<img src="http://lorempixel.com/output/abstract-q-c-320-240-7.jpg" class="img-responsive hidden-xs" style="float:left; margin: 0 20px 20px 0px"/>

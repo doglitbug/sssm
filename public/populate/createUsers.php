@@ -23,8 +23,8 @@ echo "Monday of this week is: ".date("Y-m-d", $monday_of_week);
 echo "<br/>";
 
 //Friday afternoon to saturday night all year
-createSchedule(1, "2016-01-06","16:00","24:00",0,"Looking after Samuel");
-createSchedule(1, "2016-01-07","00:00","17:40",0,"Looking after Samuel");
+createSchedule(1, "2017-01-06","16:00","24:00",0,"Looking after Samuel");
+createSchedule(1, "2017-01-07","00:00","17:40",0,"Looking after Samuel");
 
 //Add a couple of classes on monday this week, placed out of order on purpose
 createSchedule(1,date("Y-m-d",$monday_of_week),"12:00","14:00",1,"Computer class");
