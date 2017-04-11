@@ -19,8 +19,20 @@ $span = 7;
 
 //TODO Check to see if user is trying to view a different user without being a manager
 
-//Build query
+//Get details on user we are viewing
+$query = "SELECT CONCAT(firstname,' ',lastname) AS name from tbl_user WHERE user_id='$user_id' LIMIT 1";
+$result = mysqli_query($dbc, $query) or die('Error getting users name: ' . mysqli_error($dbc));
+//Check for result;
+if (mysqli_num_rows($result) == 0){
+	echo "<h1>Invalid user_id</h1><br/>";
+	die();
+}
+//Get name
+$user=mysqli_fetch_array($result)['name'];
 
+echo "<h1>View schedule for $user, week starting ".date("d-m-Y",strtotime($start_date))."</h1>";
+
+//Build query for weeks data
 $query = "SELECT * FROM tbl_schedule 
 WHERE user_id='1' AND start_date<='$end_date' AND 
 (occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='$start_date'))
