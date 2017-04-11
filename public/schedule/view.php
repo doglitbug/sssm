@@ -9,8 +9,19 @@ $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 //TODO Check for form data:
 //TODO user_id, default current
 if (isset($_GET['user_id'])){
+	//Get requested user_id
 	$user_id  = mysqli_real_escape_string($dbc, trim($_GET['user_id']));
+	//Check if we are not viewing ourself, if so are we a manager
+	if ($_SESSION['user_id']!=$user_id AND $_SESSION['manager']!='1'){
+		echo "<h1>Manager access required</h1>\n";
+		echo "<ul>\n";
+		echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
+		echo "</ul>\n";
+		require_once('../scripts/footer.php');
+		die();
+	}
 } else {
+	//View schedule for ourselves
 	$user_id = $_SESSION['user_id'];
 }
 

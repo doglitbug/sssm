@@ -44,7 +44,6 @@ if (isset($_POST['submit'])){
 			//Log in user
 			$_SESSION['user_id']=$row['user_id'];
 			$_SESSION['username']=$row['username'];
-			$_SESSION['firstname']=$row['firstname'];
 			$_SESSION['manager']=$row['manager'];
 
 			//TODO redirect user
