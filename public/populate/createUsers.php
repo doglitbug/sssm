@@ -22,6 +22,7 @@ $monday_of_week = getMondayOfWeek($today);
 echo "Monday of this week is: ".date("Y-m-d", $monday_of_week);
 echo "<br/>";
 
+////////// Schedule data for first user
 //Friday afternoon to saturday night all year
 createSchedule(1, "2017-01-06","16:00","24:00",0,"Looking after Samuel");
 createSchedule(1, "2017-01-07","00:00","17:40",0,"Looking after Samuel");
@@ -44,6 +45,14 @@ createSchedule(1,date("Y-m-d",strtotime("-3 day",$monday_of_week)),"8:00","11:00
 
 //Add a 2 week event starting next week
 createSchedule(1,date("Y-m-d",strtotime("+9 day",$monday_of_week)),"9:00","12:00",2,"Attend gym(again)");
+
+////////// Schedule data for user 2 //////////
+//User works mon-fri 8-5
+createSchedule(2, "2017-01-02","08:00","17:00",0,"Work");
+createSchedule(2, "2017-01-03","08:00","17:00",0,"Work");
+createSchedule(2, "2017-01-04","08:00","17:00",0,"Work");
+createSchedule(2, "2017-01-05","08:00","17:00",0,"Work");
+createSchedule(2, "2017-01-06","08:00","17:00",0,"Work");
 
 
 
