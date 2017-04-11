@@ -8,7 +8,11 @@ $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //TODO Check for form data:
 //TODO user_id, default current
-$user_id = $_SESSION['user_id'];
+if (isset($_GET['user_id'])){
+	$user_id  = mysqli_real_escape_string($dbc, trim($_GET['user_id']));
+} else {
+	$user_id = $_SESSION['user_id'];
+}
 
 //TODO date, default today/monday
 $start_date = date("Y-m-d",getmondayOfWeek(date("Y-m-d")));
@@ -34,7 +38,7 @@ echo "<h1>View schedule for $user, week starting ".date("d-m-Y",strtotime($start
 
 //Build query for weeks data
 $query = "SELECT * FROM tbl_schedule 
-WHERE user_id='1' AND start_date<='$end_date' AND 
+WHERE user_id='$user_id' AND start_date<='$end_date' AND 
 (occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='$start_date'))
 ORDER BY (case DAYOFWEEK(start_date) WHEN 1 THEN 8 else DAYOFWEEK(start_date) END), start_time";
 
