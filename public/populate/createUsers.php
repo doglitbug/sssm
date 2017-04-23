@@ -10,11 +10,11 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 //TODO Delete previous users
 
 ////////// Create two users, one manager one not //////////
-//createUser("1","doglitbug","password","Arron","Dick","1","s_drac2@yahoo.com");
-//createUserContact("1","0273655228","","doglitbug","cellphone");
+createUser("1","doglitbug","password","Arron","Dick","1","s_drac2@yahoo.com");
+createUserContact("1","0273655228","","doglitbug","cellphone");
 
-//createUser("2","arthur","password","Arthur","Gumball","0","agumball@email.com");
-//createUserContact("2","02112345678","034132152","a.gumball","cellphone");
+createUser("2","arthur","password","Arthur","Gumball","0","agumball@email.com");
+createUserContact("2","02112345678","034132152","a.gumball","cellphone");
 
 ////////// Create some schedule data for users //////////
 $today = date("Y-m-d");

@@ -10,3 +10,4 @@
 if(isset($dbc)){
 	mysqli_close($dbc);
 }
+?>
