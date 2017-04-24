@@ -17,11 +17,11 @@
 	      	if (isset($_SESSION['manager']) && $_SESSION['manager']=='1'){
 	      		?>
 	      		<li class="dropdown">
-	      			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User management<span class="caret"></span></a>
+	      			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Staff management<span class="caret"></span></a>
 	      			<ul class="dropdown-menu">
-	      				<li><a href="../user/new.php">New</a></li>
-	      				<li><a href="../user/modify.php">Modify</a></li>
-	      				<li><a href="../user/delete.php">Delete</a></li>
+	      				<li><a href="../user/new.php">Add new</a></li>
+	      				<li><a href="../user/modify.php">Change</a></li>
+	      				<li><a href="../user/delete.php">Remove</a></li>
 	      			</ul>
 	      		</li>
 	      	<?php
@@ -31,10 +31,10 @@
 	     		<li><a href="../roster/view.php">Roster</a></li>
 	     	</ul>
 
-	     	<!--log/profile links -->
+	     	<!--log/profile links aligned to right-->
 	     	<ul class="nav navbar-nav navbar-right">
         		<li class="dropdown">
-          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Myself<span class="caret"></span></a>
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
           			<ul class="dropdown-menu">
           			<!-- TODO Hide unneeded links, eg no log in if already logged in -->
 	     				<li><a href="../user/login.php">Login</a></li>

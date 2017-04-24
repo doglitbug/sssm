@@ -33,11 +33,11 @@ require_once('connectvars.php');
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	</head>
 	<body>
-	<?php
-	//Add in navigation bar
-	require_once('navbar.php');
-	?>
+		<?php
+		require_once('navbar.php');
+		?>
 		<div class="container">
+
 
 <?php
 //Check if login is required and not logged in

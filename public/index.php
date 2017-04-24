@@ -4,14 +4,6 @@ require_once('scripts/header.php');
 
 <h1>SSSM - Simple Staff Schedule Management</h1>
 <div class="container">
-<p>
-	<ul>
-	<li><a href="user/new.php">Add a new user</a></li>
-	<li><a href="user/login.php">Log in</a></li>
-	<li><a href="user/logout.php">Log out</a></li>
-	<li><a href="schedule/view.php">View current weeks schedule</a></li>
-	</ul>
-	</p>
 	<img src="http://lorempixel.com/output/abstract-q-c-320-240-7.jpg" class="img-responsive hidden-xs" style="float:left; margin: 0 20px 20px 0px"/>
 	<p>Bacon ipsum dolor amet qui jerky kevin brisket. Shoulder aute t-bone cillum short loin. Chicken aliquip in corned beef id duis ad alcatra. Anim ut sausage est andouille nulla cupim fatback consequat eiusmod ball tip. Veniam tempor tongue ball tip, bacon tail consequat spare ribs.</p>
 	<p>Tri-tip in exercitation esse dolore bacon in. Sirloin sint elit kevin alcatra dolore pork loin beef ribs. Fatback andouille jowl venison, beef ribs in irure dolore. Jowl tenderloin aute dolore officia occaecat boudin drumstick nisi. Flank pork belly ball tip picanha rump.</p>
