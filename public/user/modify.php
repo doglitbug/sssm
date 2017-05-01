@@ -17,10 +17,11 @@ if (mysqli_num_rows($result) == 0){
 	require_once('../scripts/footer.php');
 	die();
 }
-echo "<ul>";
+echo "<h2>Select user to modify</h2>\n";
+echo "<select>\n";
 while ($row = mysqli_fetch_array($result)) {
-		echo "<li>".$row['name']." (".$row['username'].")</li>";
+		echo "<option value='".$row['user_id']."'>".$row['name']." (".$row['username'].")</option>\n";
 	}
-echo "</ul>";
+echo "</select>\n";
 require_once('../scripts/footer.php');
 ?>
