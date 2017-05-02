@@ -1,8 +1,6 @@
 <?php
 $title = "Create new users";
 require_once('../scripts/header.php');
-//Connect to database
-$GLOBALS['dbc'] = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //Turn off key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');

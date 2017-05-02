@@ -1,5 +1,7 @@
 <?php
 $title = "Log in";
+require_once('../scripts/startsession.php');
+require_once('../scripts/databaseconnection.php');
 require_once('../scripts/header.php');
 
 //Check not already logged in!
@@ -11,8 +13,6 @@ if (isset($_SESSION['username'])){
 	die();
 
 }
-//Connect to database
-$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //Set vars for sticky form
 $username = "";
@@ -46,19 +46,15 @@ if (isset($_POST['submit'])){
 			$_SESSION['username']=$row['username'];
 			$_SESSION['manager']=$row['manager'];
 
-			//TODO redirect user
-			echo "<h1>Logged in</h1>\n";
-			echo "<a href='../index.php'>Click here to return to main page</a>\n";
-			require_once('../scripts/footer.php');
+			//Redirect user to homepage
+			header("Location: /../index.php");
 			die();
 		} else {
 			$login_error="Username and/or password invalid, please try again";
 		}
 	}
 }
-
 ?>
-
 <h1>Log in</h1>
 <form method="post" action="#">
 	<div class="form-group">

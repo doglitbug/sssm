@@ -3,9 +3,6 @@ $title = "View schedule";
 $login = true;
 require_once('../scripts/header.php');
 
-//Connect to database
-$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
 //TODO Check for form data:
 //TODO user_id, default current
 if (isset($_GET['user_id'])){

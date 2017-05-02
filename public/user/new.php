@@ -1,10 +1,7 @@
 <?php
-$title = "New user registration";
+$title = "New staff member registration";
 $manager = true;
 require_once('../scripts/header.php');
-
-//Connect to database
-$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 //Set vars for sticky form
 $username = $manager = $firstname = $lastname = $email = $email1 = "";

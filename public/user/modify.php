@@ -3,9 +3,6 @@ $title = "Modify staff member";
 $login = true;
 require_once('../scripts/header.php');
 
-//Connect to database
-$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
 //TODO Check to see if we are displaying the default page or searching for a user
 
 //Display a search box for all users

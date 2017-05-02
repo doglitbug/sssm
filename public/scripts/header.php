@@ -1,10 +1,6 @@
 <?php
-//Start the session
 require_once('startsession.php');
-
-//Set up vars for database connection
-require_once('connectvars.php');
-
+require_once('databaseconnection.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,22 +34,18 @@ require_once('connectvars.php');
 		?>
 		<div class="container">
 
-
 <?php
+//Check access permission
+if (isset($manager) && $manager == true && (!isset($_SESSION['manager']) || $_SESSION['manager']!='1')){
+	header("Location: /../errors/403.php");
+    die('You are not allowed to access this page.');
+}
+
 //Check if login is required and not logged in
 if (isset($login) && $login == true && !isset($_SESSION['username'])){
 	echo "<h1>Login required</h1>\n";
 	echo "<ul>\n";
 	echo "<li><a href='../user/login.php'>Click here to log in</a></li>\n";
-	echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
-	echo "</ul>\n";
-	require_once('footer.php');
-	die();
-}
-
-if (isset($manager) && $manager == true && (!isset($_SESSION['manager']) || $_SESSION['manager']!='1')){
-	echo "<h1>Manager access required</h1>\n";
-	echo "<ul>\n";
 	echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
 	echo "</ul>\n";
 	require_once('footer.php');
