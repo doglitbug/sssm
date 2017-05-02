@@ -39,7 +39,7 @@
 
           			<?php
           			//Check if logged in
-          			if (isset($_SESSION['user_id'])){
+          			if (!isset($_SESSION['user_id'])){
           				echo "<li><a href='../user/login.php'>Login</a></li>\n";
           			} else {
           				echo "<li><a href='../user/modify.php'>Edit my details</a></li>\n";
