@@ -55,7 +55,12 @@ if ($_SESSION['manager']==1){
 	<?php
 	echo "<select name='user_id'>\n";
 	while ($row = mysqli_fetch_array($result)) {
-		echo "<option value='".$row['user_id']."'>".$row['name']." (".$row['username'].")</option>\n";
+		echo "<option value='".$row['user_id']."'";
+		//Default to currently viewed user
+		if ($user_id==$row['user_id']){
+			echo " selected='selected'";
+		}
+		echo ">".$row['name']." (".$row['username'].")</option>\n";
 	}
 	echo "</select>\n";
 	?>
