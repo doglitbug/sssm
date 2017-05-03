@@ -42,6 +42,31 @@ $user=mysqli_fetch_array($result)['name'];
 
 echo "<h1>View availability for $user, week starting ".date("d-m-Y",strtotime($start_date))."</h1>";
 
+//Display staff selector if manager
+if ($_SESSION['manager']==1){
+	//Display a search box for all users
+	$query = "SELECT CONCAT(firstname,' ',lastname) AS name, username, user_id from tbl_user";
+	$result = mysqli_query($dbc, $query) or die('Error getting list of all staff: ' . mysqli_error($dbc));
+	?>
+	<h3>View schedule for user:</h3>
+	<form method="get" action="#">
+	<div class="form-group container">
+
+	<?php
+	echo "<select name='user_id'>\n";
+	while ($row = mysqli_fetch_array($result)) {
+		echo "<option value='".$row['user_id']."'>".$row['name']." (".$row['username'].")</option>\n";
+	}
+	echo "</select>\n";
+	?>
+	</div>
+	<div class="form-group container">
+		<button type="submit" name="view" class="btn btn-default">View</button>
+	</div>
+	</form>
+	<?php
+}
+
 //Build query for weeks data
 $query = "SELECT * FROM tbl_schedule 
 WHERE user_id='$user_id' AND start_date<='$end_date' AND 
@@ -73,7 +98,6 @@ if (mysqli_num_rows($result) == 0){
 }
 
 ?>
-<!-- TODO View schedule etc -->
 
 <?php
 require_once('../scripts/footer.php');

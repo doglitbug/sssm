@@ -14,11 +14,29 @@ if (mysqli_num_rows($result) == 0){
 	require_once('../scripts/footer.php');
 	die();
 }
-echo "<h2>Select user to modify</h2>\n";
+
+?>
+<h2>Select user to modify</h2>
+<form method="post" action="#">
+	<div class="form-group container">
+
+<?php
 echo "<select>\n";
 while ($row = mysqli_fetch_array($result)) {
 		echo "<option value='".$row['user_id']."'>".$row['name']." (".$row['username'].")</option>\n";
 	}
 echo "</select>\n";
+
+?>
+	</div>
+
+	<div class="form-group container">
+		<button type="submit" name="modify" class="btn btn-default">Modify</button>
+		<button type="submit" name="delete" class="btn btn-default">Delete</button>
+	</div>
+
+</form>
+
+<?php
 require_once('../scripts/footer.php');
 ?>
