@@ -9,11 +9,12 @@
 	      	</button>
 	      	<a class="navbar-brand" href="../index.php">SSSM</a>
 	      </div>
+
+	     <div class="collapse navbar-collapse" id="bs-navbar">
 	     <?php
 	     //Hide all links except for log in if not logged in
 	     if (isset($_SESSION['user_id'])){
-	      ?>
-	     <div class="collapse navbar-collapse" id="bs-navbar">
+	     ?>
 	     	<ul class="nav navbar-nav">
 	     	<?php
 	     	//Users links, manager only
