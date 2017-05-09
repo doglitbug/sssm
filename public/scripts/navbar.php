@@ -9,7 +9,10 @@
 	      	</button>
 	      	<a class="navbar-brand" href="../index.php">SSSM</a>
 	      </div>
-
+	     <?php
+	     //Hide all links except for log in if not logged in
+	     if (isset($_SESSION['user_id'])){
+	      ?>
 	     <div class="collapse navbar-collapse" id="bs-navbar">
 	     	<ul class="nav navbar-nav">
 	     	<?php
@@ -30,7 +33,9 @@
 	      		<li><a href="../schedule/view.php">Availability</a></li>
 	     		<li><a href="../roster/view.php">Roster</a></li>
 	     	</ul>
-
+	     	<?php
+	     }
+	     ?>
 	     	<!--log/profile links aligned to right-->
 	     	<ul class="nav navbar-nav navbar-right">
         		<li class="dropdown">
