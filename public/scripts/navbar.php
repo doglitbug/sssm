@@ -32,7 +32,7 @@
                     }
                     ?>
                     <li><a href="../roster/view.php">Roster</a></li>
-                    <li><a href="../available/view.php">Avaliable shifts</a></li>
+                    <li><a href="../available/view.php">Available shifts</a></li>
                     <li><a href="../schedule/view.php">Schedule</a></li>
                 </ul>
 
