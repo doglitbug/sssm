@@ -28,10 +28,11 @@ if (isset($_GET['date'])){
     //TODO Check date is valid...
     $start_date = strtotime(mysqli_real_escape_string($dbc, trim($_GET['date'])));
 } else {
-    $start_date = getmondayOfWeek(date("Y-m-d"));
+    $start_date = strtotime("now");
 }
-
-
+//Mondayise whatever date it is
+$start_date = getmondayOfWeek($start_date);
+//End of week, TODO change depening on span(see below)
 $end_date = strtotime("+6 days", $start_date);
 //Dates for prev/next week
 $prevWeekStart = strtotime("-1 week", $start_date);
@@ -59,6 +60,7 @@ echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
 <div class="well well-sm">
     <form method="get" action ="#">
         <div class="form-group container">
+            <button type="submit" name="date" value="<?php echo date("d-m-Y"); ?>">Today</button>
             <button type="submit" name="date" value="<?php echo date("d-m-Y", $prevWeekStart); ?>">
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="Previous week"></span>
             </button>
