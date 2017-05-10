@@ -34,27 +34,28 @@
 	      		<li><a href="../schedule/view.php">Availability</a></li>
 	     		<li><a href="../roster/view.php">Roster</a></li>
 	     	</ul>
-	     	<?php
-	     }
-	     ?>
+
 	     	<!--log/profile links aligned to right-->
 	     	<ul class="nav navbar-nav navbar-right">
         		<li class="dropdown">
           			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
           			<ul class="dropdown-menu">
-
-          			<?php
-          			//Check if logged in
-          			if (!isset($_SESSION['user_id'])){
-          				echo "<li><a href='../user/login.php'>Login</a></li>\n";
-          			} else {
-          				echo "<li><a href='../user/modify.php'>Edit my details</a></li>\n";
-          				echo "<li><a href='../user/logout.php'>Logout</a></li>\n";
-          			}
-          			?>
+          				<li><a href='../user/modify.php'>Edit my details</a></li>
+          				<li><a href='../user/logout.php'>Logout</a></li>
 	     			</ul>
 	     		</li>
 	     	</ul>
+
+	     	<?php
+	     } else {
+	     ?>
+	     	<!--log/profile links aligned to right-->
+	     	<ul class="nav navbar-nav navbar-right">
+        		<li><a href='../user/login.php'>Login</a></li>
+	     	</ul>
+	     	<?php
+	     }
+	     ?>
 	     </div>
     </div>
 </nav>
