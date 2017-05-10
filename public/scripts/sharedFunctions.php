@@ -23,7 +23,6 @@ function isManager() {
  * @returns strtotime Closest proceeding Monday, if not already a Monday
  * */
 function getMondayOfWeek($date) {
-
     if (!is_numeric($date)) {
         $date = strtotime($date);
     }

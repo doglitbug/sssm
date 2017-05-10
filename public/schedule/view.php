@@ -69,7 +69,7 @@ echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
                 <span class="glyphicon glyphicon-menu-right" aria-hidden="true" aria-label="Next week"></span>
             </button>
         </div> 
-    </form>
+    
 </div>
 
 <?php
@@ -87,7 +87,7 @@ if (isManager()) {
 
     <div class="well well-sm">
     <h3>View schedule for user:</h3>
-    <form method="get" action="#">
+    
         <div class="form-group container">
 
             <?php
