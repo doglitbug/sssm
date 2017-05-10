@@ -23,9 +23,9 @@ $result = mysqli_query($dbc, $query);
 $row = mysqli_fetch_array($result);
 
 //Check if username was found
-if (mysqli_num_rows($result)==0){
-	echo "Available";
+if (mysqli_num_rows($result) == 0) {
+    echo "Available";
 } else {
-	echo "Taken";
+    echo "Taken";
 }
 ?>

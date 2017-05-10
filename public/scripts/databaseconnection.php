@@ -1,4 +1,5 @@
 <?php
+
 //Set up vars for database connection
 require_once('connectvars.php');
 //Connect to database
