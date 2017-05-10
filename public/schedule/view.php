@@ -22,12 +22,21 @@ if (isset($_GET['user_id'])) {
     $user_id = $_SESSION['user_id'];
 }
 
-//TODO date, default today/monday
-
+//Check for date
 //All dates stored in strtotime format and converted to Y-m-d when displayed/used in query
-$start_date = getmondayOfWeek(date("Y-m-d"));
+if (isset($_GET['date'])){
+    //TODO Check date is valid...
+    $start_date = strtotime(mysqli_real_escape_string($dbc, trim($_GET['date'])));
+} else {
+    $start_date = getmondayOfWeek(date("Y-m-d"));
+}
+
+
 $end_date = strtotime("+6 days", $start_date);
-//TODO span: day, week, month, 7 day. Default week
+//Dates for prev/next week
+$prevWeekStart = strtotime("-1 week", $start_date);
+$nextWeekStart = strtotime("+1 week", $start_date);
+//TODO span: day, week, month, 7 day. Default is week
 //TODO The ordering of the events is gonna really screw up when other than 7 days...
 $span = 7;
 
@@ -41,17 +50,32 @@ if (mysqli_num_rows($result) == 0) {
 }
 //Get name
 $user = mysqli_fetch_array($result)['name'];
+//Format displayed date TODO Use nice google calendar format?
+$pretty_date = date("d-m-Y", $start_date);
 
-echo "<h1>View availability for $user, week starting " . date("d-m-Y", $start_date) . "</h1>";
-//Display previous/next week selector
-$prevWeekStart = strtotime("-1 week", $start_date);
-$nextWeekStart = strtotime("+1 week", $start_date);
+echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
+?>
 
-echo date("Y-m-d", $start_date)."<br>";
-echo date("Y-m-d", $end_date)."<br>";
-echo date("Y-m-d", $prevWeekStart)."<br>";
-echo date("Y-m-d", $nextWeekStart)."<br>";
+<div class="well well-sm">
+    <form method="get" action ="#">
+        <div class="form-group container">
+            <button type="submit" name="date" value="<?php echo date("d-m-Y", $prevWeekStart); ?>">
+                <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="Previous week"></span>
+            </button>
+            
+            <button type="submit" name="date" value="<?php echo date("d-m-Y", $nextWeekStart); ?>">
+                <span class="glyphicon glyphicon-menu-right" aria-hidden="true" aria-label="Next week"></span>
+            </button>
+        </div> 
+    </form>
+</div>
 
+<?php
+//TODO test on monday/sunday and remove
+//echo date("Y-m-d", $start_date)."<br>";
+//echo date("Y-m-d", $end_date)."<br>";
+//echo date("Y-m-d", $prevWeekStart)."<br>";
+//echo date("Y-m-d", $nextWeekStart)."<br>";
 //Display staff selector if manager
 if (isManager()) {
     //Display a search box for all users
