@@ -24,7 +24,7 @@ if (isset($_GET['user_id'])) {
 
 //Check for date
 //All dates stored in strtotime format and converted to Y-m-d when displayed/used in query
-if (isset($_GET['date'])){
+if (isset($_GET['date'])) {
     //TODO Check date is valid...
     $start_date = strtotime(mysqli_real_escape_string($dbc, trim($_GET['date'])));
 } else {
@@ -60,61 +60,54 @@ echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
 <div class="well well-sm">
     <form method="get" action ="#">
         <div class="form-group container">
+            <input type="hidden" name="date" value="<?php echo date("d-m-Y", $start_date); ?>">
             <button type="submit" name="date" value="<?php echo date("d-m-Y"); ?>">Today</button>
             <button type="submit" name="date" value="<?php echo date("d-m-Y", $prevWeekStart); ?>">
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="Previous week"></span>
             </button>
-            
+
             <button type="submit" name="date" value="<?php echo date("d-m-Y", $nextWeekStart); ?>">
                 <span class="glyphicon glyphicon-menu-right" aria-hidden="true" aria-label="Next week"></span>
             </button>
-        </div> 
-    
-</div>
 
-<?php
+
+
+            <?php
 //TODO test on monday/sunday and remove
 //echo date("Y-m-d", $start_date)."<br>";
 //echo date("Y-m-d", $end_date)."<br>";
 //echo date("Y-m-d", $prevWeekStart)."<br>";
 //echo date("Y-m-d", $nextWeekStart)."<br>";
 //Display staff selector if manager
-if (isManager()) {
-    //Display a search box for all users
-    $query = "SELECT CONCAT(firstname,' ',lastname) AS name, username, user_id from tbl_user";
-    $result = mysqli_query($dbc, $query) or die('Error getting list of all staff: ' . mysqli_error($dbc));
-    ?>
+            if (isManager()) {
+                //Display a search box for all users
+                $query = "SELECT CONCAT(firstname,' ',lastname) AS name, username, user_id from tbl_user";
+                $result = mysqli_query($dbc, $query) or die('Error getting list of all staff: ' . mysqli_error($dbc));
+                ?>    
 
-    <div class="well well-sm">
-    <h3>View schedule for user:</h3>
-    
-        <div class="form-group container">
-
-            <?php
-            echo "<select name='user_id'>\n";
-            while ($row = mysqli_fetch_array($result)) {
-                echo "<option value='" . $row['user_id'] . "'";
-                //Default to currently viewed user
-                if ($user_id == $row['user_id']) {
-                    echo " selected='selected'";
+                <?php
+                echo "<select name='user_id'>\n";
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<option value='" . $row['user_id'] . "'";
+                    //Default to currently viewed user
+                    if ($user_id == $row['user_id']) {
+                        echo " selected='selected'";
+                    }
+                    echo ">" . $row['name'] . " (" . $row['username'] . ")</option>\n";
                 }
-                echo ">" . $row['name'] . " (" . $row['username'] . ")</option>\n";
-            }
-            echo "</select>\n";
-            ?>
-        </div>
-        <div class="form-group container">
-            <button type="submit" name="view" class="btn btn-default">View</button>
-        </div>
-    </form>
+                echo "</select>\n";
+                ?>
+                <button type="submit" name="select" class="btn btn-default">Change user</button>
+            </div>
+        </form>
     </div>
     <?php
 }
 
 //Build query for weeks data
 $query = "SELECT * FROM tbl_schedule 
-WHERE user_id='$user_id' AND start_date<='".date("Y-m-d", $end_date)."' AND 
-(occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='".date("Y-m-d",$start_date)."'))
+WHERE user_id='$user_id' AND start_date<='" . date("Y-m-d", $end_date) . "' AND 
+(occurrences=0 OR (DATE_ADD(start_date, INTERVAL ((occurrences-1)*7) DAY)>='" . date("Y-m-d", $start_date) . "'))
 ORDER BY (case DAYOFWEEK(start_date) WHEN 1 THEN 8 else DAYOFWEEK(start_date) END), start_time";
 
 $result = mysqli_query($dbc, $query) or die('Error getting schedule data: ' . mysqli_error($dbc));
