@@ -7,8 +7,8 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
 //TODO Delete previous users
 ////////// Create two users, one manager one not //////////
-createUser("1", "doglitbug", "password", "Arron", "Dick", "1", "0273655228", "", "doglitbug", "s_drac2@yahoo.com", "cellphone");
-createUser("2", "arthur", "password", "Arthur", "Gumball", "0", "02112345678", "034132152", "a.gumball", "agumball@email.com", "landline");
+createUser("1", "doglitbug", "password", "Arron", "Dick", "1", "0273655228", "", "s_drac2@yahoo.com");
+createUser("2", "arthur", "password", "Arthur", "Gumball", "0", "02112345678", "034132152", "agumball@email.com");
 
 ////////// Create some schedule data for users //////////
 $today = date("Y-m-d");
@@ -50,13 +50,13 @@ createSchedule(2, "2017-01-06", "08:00", "17:00", 0, "Work");
 //Turn back on the key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 1');
 
-function createUser($user_id, $username, $password, $firstname, $lastname, $manager, $cellphone, $landline, $facebook, $email, $preferred) {
+function createUser($user_id, $username, $password, $firstname, $lastname, $manager, $cellphone, $landline, $email) {
     //Encrpyt password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     //Build INSERT query
-    $query = "INSERT INTO tbl_user (user_id, username, password, firstname, lastname, manager, cellphone, landline, facebook, email, preferred) VALUES"
-            . "                    ('$user_id', '$username', '$hashed_password', '$firstname', '$lastname', '$manager', '$cellphone', '$landline', '$facebook', '$email', '$preferred')";
+    $query = "INSERT INTO tbl_user (user_id, username, password, firstname, lastname, manager, cellphone, landline, email) VALUES"
+            . "                    ('$user_id', '$username', '$hashed_password', '$firstname', '$lastname', '$manager', '$cellphone', '$landline', '$email')";
 
     //Execute query
     mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t add user: ' . mysqli_error($GLOBALS['dbc']));

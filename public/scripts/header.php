@@ -24,7 +24,7 @@ require_once('sharedFunctions.php');
             ?>
         </title>
 
-        <link rel="stylesheet" type="text/css" href="scripts/styles.css" />
+        <link rel="stylesheet" type="text/css" href="styles.css" />
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />

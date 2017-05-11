@@ -4,7 +4,7 @@ $manager = true;
 require_once('../scripts/header.php');
 
 //Set vars for sticky form
-$username = $manager = $firstname = $lastname = $email = $email1 = "";
+$username = $manager = $firstname = $lastname = $email = $email1 = $cellphone = $landline = "";
 
 //Set error vars
 $username_error = $firstname_error = $lastname_error = $email_error = $email1_error = $password_error = $password1_error = "";
@@ -20,6 +20,8 @@ if (isset($_POST['submit'])) {
     $email1 = mysqli_real_escape_string($dbc, trim($_POST['email1']));
     $password = mysqli_real_escape_string($dbc, trim($_POST['password']));
     $password1 = mysqli_real_escape_string($dbc, trim($_POST['password1']));
+    $cellphone = mysqli_real_escape_string($dbc, trim($_POST['cellphone']));
+    $landline = mysqli_real_escape_string($dbc, trim($_POST['landline']));
 
     //Check username is valid
     if (empty($username)) {
@@ -46,11 +48,6 @@ if (isset($_POST['submit'])) {
         $firstname_error = "Please enter a first name";
     }
 
-    //Check lastname has been enetered
-    if (empty($lastname)) {
-        $lastname_error = "Please enter a last name";
-    }
-
     ////////// Email validation and checks //////////
     //Check email address has been entered
     if (empty($email)) {
@@ -68,11 +65,10 @@ if (isset($_POST['submit'])) {
     }
 
     //Check email hasn't already been used
-    $query = "SELECT email FROM tbl_contact WHERE email='$email' LIMIT 1";
+    $query = "SELECT email FROM tbl_user WHERE email='$email' LIMIT 1";
 
     //Grab result
     $result = mysqli_query($dbc, $query) or die('Couldn\'t search for email: ') . mysqli_error($dbc);
-    ;
 
     //Grab rows
     $row = mysqli_fetch_array($result);
@@ -108,25 +104,18 @@ if (isset($_POST['submit'])) {
         }
     }
     ////////// Check to see if all data is valid and if so, make a new user //////////
-    if (($username_error . $firstname_error . $lastname_error . $email_error . $email1_error . $password_error . $password1_error) == "") {
+    if (($username_error . $firstname_error . $email_error . $email1_error . $password_error . $password1_error) == "") {
 
         //Encrpyt password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         //Build query to create user
-        $query = "INSERT INTO tbl_user (username, password, firstname, lastname, manager) VALUES ('$username', '$hashed_password', '$firstname', '$lastname', '$manager')";
+        $query = "INSERT INTO tbl_user (username, password, firstname, lastname, manager, cellphone, landline, email) VALUES"
+            . "                    ('$username', '$hashed_password', '$firstname', '$lastname', '$manager', '$cellphone', '$landline', '$email')";
 
         //Insert user
         mysqli_query($dbc, $query) or die('Couldn\'t add new user: ') . mysqli_error($dbc);
 
-        //Get id of new user
-        $user_id = mysqli_insert_id($dbc);
-
-        //Build query to create user contact
-        $query = "INSERT INTO tbl_contact (user_id, email) VALUES ('$user_id', '$email')";
-
-        //Insert contact details
-        mysqli_query($dbc, $query) or die('Couldn\'t add new users contact details: ') . mysqli_error($dbc);
         ?>
         <h1><?php echo $title; ?></h1>
         <div class="container">
@@ -140,22 +129,23 @@ if (isset($_POST['submit'])) {
 ?>
 <h1><?php echo $title; ?></h1>
 <form method="post" action="#">
+    <h3>Personal details:</h3>
     <div class="form-group container">
         <div class="col-md-6">
-            <label for="username">Username</label>
+            <label for="username">Username*</label>
             <input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username; ?>"/>
             <div class="error"><?php echo $username_error; ?></div>
         </div>
 
         <div class="col-md-6">
             <label for="manager">Manager</label>
-            <input type="checkbox" class="form-check-input" id="manager" name="manager" value="1" <?php if ($manager == '1') echo "checked"; ?>/>
+            <input type="checkbox" class="form-check-input" id="manager" name="manager" value="1"<?php if ($manager == '1') { echo "checked";} ?>/>
         </div>
     </div>
 
     <div class="form-group container">
         <div class="col-md-6">
-            <label for="firstname">First name</label>
+            <label for="firstname">First name*</label>
             <input type="text" class="form-control" id="firstname" placeholder="First name" name="firstname" value="<?php echo $firstname; ?>"/>
             <div class="error"><?php echo $firstname_error; ?></div>
         </div>
@@ -169,13 +159,13 @@ if (isset($_POST['submit'])) {
 
     <div class="form-group container">
         <div class="col-md-6">
-            <label for="email">Email address</label>
+            <label for="email">Email address*</label>
             <input type="email" class="form-control" id="email" placeholder="Email address" name="email" value="<?php echo $email; ?>"/>
             <div class="error"><?php echo $email_error; ?></div>
         </div>
 
         <div class="col-md-6">
-            <label for="email1">Confirm email address</label>
+            <label for="email1">Confirm email address*</label>
             <input type="email" class="form-control" id="email1" placeholder="Email address" name="email1" value="<?php echo $email1; ?>"/>
             <div class="error"><?php echo $email1_error; ?></div>
         </div>
@@ -183,15 +173,29 @@ if (isset($_POST['submit'])) {
 
     <div class="form-group container">
         <div class="col-md-6">
-            <label for="password">Password</label>
+            <label for="password">Password*</label>
             <input type="password" class="form-control" id="password" placeholder="Password" name="password"/>
             <div class="error"><?php echo $password_error; ?></div>
         </div>
 
         <div class="col-md-6">
-            <label for="password1">Confirm Password</label>
+            <label for="password1">Confirm Password*</label>
             <input type="password" class="form-control" id="password1" placeholder="Reenter password" name="password1"/>
             <div class="error"><?php echo $password1_error; ?></div>
+        </div>
+    </div>
+
+    <h3>Contact details:</h3>
+
+    <div class="form-group container">
+        <div class="col-md-6">
+            <label for="cellphone">Cellphone</label>
+            <input type="text" class="form-control" id="cellphone" placeholder="Cellphone" name="cellphone" value="<?php echo $cellphone; ?>"/>
+        </div>
+
+        <div class="col-md-6">
+            <label for="landline">Landline</label>
+            <input type="text" class="form-control" id="landline" placeholder="Landline" name="landline" value="<?php echo $landline; ?>"/>
         </div>
     </div>
 
