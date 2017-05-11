@@ -13,7 +13,7 @@
         <div class="collapse navbar-collapse" id="bs-navbar">
             <?php
             //Hide all links except for log in if not logged in
-            if (loggedIn()) {
+            if (isLoggedIn()) {
                 ?>
                 <ul class="nav navbar-nav">
                     <?php

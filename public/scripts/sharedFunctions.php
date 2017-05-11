@@ -4,7 +4,7 @@
  * @return boolean True if a user is logged in
  */
 
-function loggedIn() {
+function isLoggedIn() {
     return (isset($_SESSION['user_id']));
 }
 
