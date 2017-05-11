@@ -13,27 +13,26 @@ if (mysqli_num_rows($result) == 0) {
     require_once('../scripts/footer.php');
     die();
 }
-?>
-<h2>Select user to modify</h2>
-<form method="post" action="#">
-    <div class="form-group container">
 
-        <?php
-        echo "<select>\n";
-        while ($row = mysqli_fetch_array($result)) {
-            echo "<option value='" . $row['user_id'] . "'>" . $row['name'] . " (" . $row['username'] . ")</option>\n";
-        }
-        echo "</select>\n";
-        ?>
-    </div>
+//Output all users in cards
+while ($row = mysqli_fetch_array($result)) {
+    echo "<div class='col-sm-6 col-md-4'>\n";
+    echo "<div class='panel panel-default'>\n";
+    echo "<div class='panel-heading'>" . $row['name'] . "</div>\n";
+    echo "<div class='panel-body'>\n";
 
-    <div class="form-group container">
-        <button type="submit" name="modify" class="btn btn-default">Modify</button>
-        <button type="submit" name="delete" class="btn btn-default">Delete</button>
-    </div>
+    echo "Details about user<br/>\n";
 
-</form>
+    if (isManager()) {
+        echo "<a class='btn btn-primary' href='#'>Delete</a>\n";
+        echo "<a class='btn btn-primary' href='#'>Modify</a>\n";
+    }
+    
+    
+    echo "</div>\n";
+    echo "</div>\n";
+    echo "</div>\n";
+}
 
-<?php
 require_once('../scripts/footer.php');
 ?>

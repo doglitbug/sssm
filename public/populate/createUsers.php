@@ -1,5 +1,4 @@
 <?php
-
 $title = "Create new users";
 require_once('../scripts/header.php');
 
@@ -13,7 +12,6 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 //
 //createUser("2", "arthur", "password", "Arthur", "Gumball", "0", "agumball@email.com");
 //createUserContact("2", "02112345678", "034132152", "a.gumball", "cellphone");
-
 ////////// Create some schedule data for users //////////
 $today = date("Y-m-d");
 $monday_of_week = getMondayOfWeek($today);
@@ -99,6 +97,29 @@ function createSchedule($user_id, $start_date, $start_time, $end_time, $occurren
 
     echo "Created schedule:<br/>\n";
 }
+?>
+<form method="get" action ="#">
+    <div class="form-group container">
 
+            <label for="users">Create users</label>
+            <input type="checkbox" class="form-check-input" id="users" name="users"/><br/>
+
+            <label for="schedule">Create new schedule</label>
+            <input type="checkbox" class="form-check-input" id="schedule" name="schedule"/><br/>
+
+            <label for="roster">Create new roster</label>
+            <input type="checkbox" class="form-check-input" id="roster" name="roster"/><br/>
+    </div>
+    
+    <div class="form-group container">
+        <div class="container">
+            <button type="submit" name="submit" class="btn btn-default">Create selected sample data</button>
+        </div>
+    </div>
+
+</form>
+
+
+<?php
 require_once('../scripts/footer.php');
 ?>
