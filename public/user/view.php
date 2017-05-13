@@ -1,5 +1,5 @@
 <?php
-$title = "Modify staff member";
+$title = "View all staff members";
 $login = true;
 require_once('../scripts/header.php');
 
@@ -36,6 +36,7 @@ while ($row = mysqli_fetch_array($result)) {
 
     //Actions
     echo "<li class='list-group-item'><a class='btn btn-primary' href='update.php?user_id=".$row['user_id']."'>Update</a>\n";
+    echo "<a class='btn btn-info' href='../schedule/view.php?user_id=".$row['user_id']."'>Schedule</a>\n";
     
     if (isManager()) {
         //Cannot delete yourself!

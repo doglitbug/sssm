@@ -1,5 +1,5 @@
 <?php
-$title = "New staff member registration";
+$title = "Add new staff member";
 $manager = true;
 require_once('../scripts/header.php');
 
@@ -32,7 +32,6 @@ if (isset($_POST['submit'])) {
 
         //Grab result
         $result = mysqli_query($dbc, $query) or die('Couldn\'t search for username: ') . mysqli_error($dbc);
-        ;
 
         //Grab rows
         $row = mysqli_fetch_array($result);
@@ -201,8 +200,9 @@ if (isset($_POST['submit'])) {
 
     <div class="form-group container">
         <div class="container">
-            <button type="submit" name="submit" class="btn btn-success">Register</button>
-            <button type="reset" value="Reset" class="btn btn-warning">Reset</button>
+            <button type="submit" name="submit" class="btn btn-success">Add new staff member</button>
+            <button type="reset" value="Reset" class="btn btn-info">Reset</button>
+            <a href="../index.php" class="btn btn-danger">Cancel</a>
         </div>
     </div>
 </form>
