@@ -7,7 +7,7 @@ mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
 //TODO Delete previous users
 ////////// Create two users, one manager one not //////////
-createUser("1", "doglitbug", "password", "Arron", "Dick", "1", "0273655228", "", "s_drac2@yahoo.com");
+createUser("1", "doglitbug", "password", "Arron", "Dick", "1", "021987654", "", "s_drac2@yahoo.com");
 createUser("2", "arthur", "password", "Arthur", "Gumball", "0", "02112345678", "034132152", "agumball@email.com");
 
 ////////// Create some schedule data for users //////////
