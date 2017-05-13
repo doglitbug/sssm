@@ -10,6 +10,7 @@ if (isset($_POST['submit'])) {
     //TODO Check the check box
     $user_id = mysqli_real_escape_string($dbc, trim($_POST['user_id']));
     //TODO Check it is in the table(should validate as well...or will deleting a user_id that isn't in the table not really matter?
+    //Check its not us!
     $query = "DELETE FROM tbl_user WHERE user_id='$user_id'";
 
     //TODO Delete linked tables or will cascade take care of this?
