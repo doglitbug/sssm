@@ -201,7 +201,8 @@ if (isset($_POST['submit'])) {
 
     <div class="form-group container">
         <div class="container">
-            <button type="submit" name="submit" class="btn btn-default">Register</button>
+            <button type="submit" name="submit" class="btn btn-success">Register</button>
+            <button type="reset" value="Reset" class="btn btn-warning">Reset</button>
         </div>
     </div>
 </form>

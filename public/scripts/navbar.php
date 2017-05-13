@@ -23,9 +23,10 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Staff management<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="../user/new.php">Add new</a></li>
-                                <li><a href="../user/modify.php">Change</a></li>
-                                <li><a href="../user/delete.php">Remove</a></li>
+                                <li><a href="../user/add.php">Add new</a></li>
+                                <li><a href="../user/view.php">View all</a></li>
+                                <li><a href="../user/update.php">Update</a></li>
+                                <li><a href="../user/remove.php">Remove</a></li>
                             </ul>
                         </li>
                         <?php
@@ -41,7 +42,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href='../user/modify.php'>Edit my details</a></li>
+                            <li><a href='../user/update.php'>Update my details</a></li>
                             <li><a href='../user/logout.php'>Logout</a></li>
                         </ul>
                     </li>
