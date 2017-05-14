@@ -5,8 +5,11 @@ require_once('../scripts/header.php');
 
 //TODO Check deleted user is not logged in user!
 //This ensures we always have at least one manager in place(hopefully)
-//$manager = mysqli_real_escape_string($dbc, trim(isset($_POST['manager']) ? $_POST['manager'] : '0'));
-if (isset($_POST['submit']) && isset($_POST['confirm']) && $_POST['confirm']=="confirm") {
+
+//if (isset($_POST['confirm']) && $_POST['confirm']=="confirm"))
+
+if (isset($_POST['submit'])) {
+    
     $user_id = mysqli_real_escape_string($dbc, trim($_POST['user_id']));
     //TODO Check it is in the table(should validate as well...or will deleting a user_id that isn't in the table not really matter?
     //Check its not us!
@@ -15,8 +18,8 @@ if (isset($_POST['submit']) && isset($_POST['confirm']) && $_POST['confirm']=="c
     $result = mysqli_query($dbc, $query) or die('Error deleting user: ' . mysqli_error($dbc));
     echo "User successfully deleted";
 
-    //Check see if we have been passed a user_id to remove
 } else if (isset($_GET['user_id'])) {
+    //Check see if we have been passed a user_id to remove
     $user_id = mysqli_real_escape_string($dbc, trim($_GET['user_id']));
     ?>
 <div class="container-fluid">
