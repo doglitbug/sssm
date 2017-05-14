@@ -21,7 +21,7 @@ if (isset($_POST['submit']) && isset($_POST['confirm']) && $_POST['confirm']=="c
     ?>
 <div class="container-fluid">
     <p>Please note that this action is irreversible and will result in all the users details, schedule and availability being completed removed</p>
-    <form method="post" action="#">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <input type="hidden" name ="user_id" value="<?php echo $user_id; ?>">
         <div class="form-group container">
             <label for="confirm">Confirm removing this staff member</label>

@@ -33,6 +33,7 @@ if (isset($_POST['submit'])) {
     } else {
         //Username and password have been entered
         //Build query
+        //TODO Replace * with only needed details
         $query = "SELECT * FROM tbl_user WHERE username='$username' LIMIT 1";
         $result = mysqli_query($dbc, $query) or die('Couldn\'t search for user: ') . mysqli_error($dbc);
         //Grab rows
@@ -55,7 +56,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <h1>Log in</h1>
-<form method="post" action="#">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" placeholder="Username" name="username" value="<?php echo $username; ?>"/>

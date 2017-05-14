@@ -1,25 +1,64 @@
 <?php
-$title = "Add new staff member";
-$manager = true;
+$title = "Modify staff member";
+$login = true;
 require_once('../scripts/header.php');
 
 //Set vars for sticky form
-$username = $manager = $firstname = $lastname = $email = $email1 = $cellphone = $landline = "";
+$user_id = $username = $manager = $firstname = $lastname = $email = $email1 = $cellphone = $landline = "";
 
 //Set error vars
-$username_error = $firstname_error = $lastname_error = $email_error = $email1_error = $password_error = $password1_error = "";
+$username_error = $firstname_error = $lastname_error = $email_error = $email1_error = "";
+
+if (isset($_GET['user_id'])) {
+    //Get requested user_id
+    $user_id = mysqli_real_escape_string($dbc, trim($_GET['user_id']));
+    //Check if we are not viewing ourself, if so are we a manager
+    if ($_SESSION['user_id'] != $user_id AND $_SESSION['manager'] != '1') {
+        echo "<h1>Manager access required</h1>\n";
+        echo "<ul>\n";
+        echo "<li><a href='../index.php'>Click here to return to home page</a></li>\n";
+        echo "</ul>\n";
+        require_once('../scripts/footer.php');
+        die();
+    }
+} else {
+    //View schedule for ourselves
+    $user_id = $_SESSION['user_id'];
+}
+//Go grab existing details from the database!
+$query = "SELECT username, manager, firstname, lastname, email, cellphone, landline FROM tbl_user WHERE user_id='$user_id' LIMIT 1";
+
+//Grab result
+$result = mysqli_query($dbc, $query) or die('Couldn\'t search for existing user details: ') . mysqli_error($dbc);
+
+//Check if username was found
+if (mysqli_num_rows($result) != 1) {
+    //TODO Um not sure how to deal with this...
+    die('Could not find existing user');
+}
+//Get data on the selected user
+$row = mysqli_fetch_array($result);
+
+//Get existing details to populate form
+$username = $row['username'];
+$manager = $row['manager'];
+$firstname = $row['firstname'];
+$lastname = $row['lastname'];
+$email = $email1 = $row['email'];
+$cellphone = $row['cellphone'];
+$landline = $row['landline'];
+
 
 //Check to see if form has been submitted
 if (isset($_POST['submit'])) {
     //Grab previous data
+    $user_id = mysqli_real_escape_string($dbc, trim($_POST['user_id']));
     $username = mysqli_real_escape_string($dbc, trim($_POST['username']));
     $manager = mysqli_real_escape_string($dbc, trim(isset($_POST['manager']) ? $_POST['manager'] : '0'));
     $firstname = mysqli_real_escape_string($dbc, trim($_POST['firstname']));
     $lastname = mysqli_real_escape_string($dbc, trim($_POST['lastname']));
     $email = mysqli_real_escape_string($dbc, trim($_POST['email']));
     $email1 = mysqli_real_escape_string($dbc, trim($_POST['email1']));
-    $password = mysqli_real_escape_string($dbc, trim($_POST['password']));
-    $password1 = mysqli_real_escape_string($dbc, trim($_POST['password1']));
     $cellphone = mysqli_real_escape_string($dbc, trim($_POST['cellphone']));
     $landline = mysqli_real_escape_string($dbc, trim($_POST['landline']));
 
@@ -27,8 +66,8 @@ if (isset($_POST['submit'])) {
     if (empty($username)) {
         $username_error = "Please enter a username";
     } else {
-        //Check if username is taken
-        $query = "SELECT username FROM tbl_user WHERE username='$username' LIMIT 1";
+        //Check username hasn't already been used by a different user
+        $query = "SELECT username FROM tbl_user WHERE username='$username' AND user_id!='$user_id' LIMIT 1";
 
         //Grab result
         $result = mysqli_query($dbc, $query) or die('Couldn\'t search for username: ') . mysqli_error($dbc);
@@ -60,8 +99,8 @@ if (isset($_POST['submit'])) {
         $email1_error = "Please repeat email address";
     }
 
-    //Check email hasn't already been used
-    $query = "SELECT email FROM tbl_user WHERE email='$email' LIMIT 1";
+    //Check email hasn't already been used by a different user
+    $query = "SELECT email FROM tbl_user WHERE email='$email' AND user_id!='$user_id' LIMIT 1";
 
     //Grab result
     $result = mysqli_query($dbc, $query) or die('Couldn\'t search for email: ') . mysqli_error($dbc);
@@ -79,43 +118,23 @@ if (isset($_POST['submit'])) {
         $email1_error = "Please make sure email addresses match";
     }
 
-    ////////// Password checks //////////
-    //Check password has been entered
-    if (empty($password)) {
-        $password_error = "Please enter a password";
-    } else {
-        //Check length
-        if (strlen($password) < 8) {
-            $password_error = "Please choose a longer password";
-        } else {
-            //Check password1 has been entered
-            if (empty($password1)) {
-                $password1_error = "Please repeat password";
-            } else {
-                //Check passwords match
-                if ($password != $password1) {
-                    $password1_error = "Passwords do not match";
-                }
-            }
-        }
-    }
     ////////// Check to see if all data is valid and if so, make a new user //////////
-    if (($username_error . $firstname_error . $email_error . $email1_error . $password_error . $password1_error) == "") {
+    if (($username_error . $firstname_error . $email_error . $email1_error) == "") {
 
-        //Encrpyt password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        //Build query to update user
+        $query = "UPDATE tbl_user SET username='$username', firstname='$firstname', lastname='$lastname', manager='$manager', cellphone='$cellphone', landline='$landline', email='$email' WHERE user_id='$user_id'";
 
-        //Build query to create user
-        $query = "INSERT INTO tbl_user (username, password, firstname, lastname, manager, cellphone, landline, email) VALUES"
-            . "                    ('$username', '$hashed_password', '$firstname', '$lastname', '$manager', '$cellphone', '$landline', '$email')";
-
-        //Insert user
-        mysqli_query($dbc, $query) or die('Couldn\'t add new user: ') . mysqli_error($dbc);
-
+        //Update user
+        mysqli_query($dbc, $query) or die('Couldn\'t update user details: ') . mysqli_error($dbc);
+        //If this is the current user, update SESSION varibles
+        if ($_SESSION['user_id'] == $user_id) {
+            $_SESSION['username'] = $username;
+            $_SESSION['manager'] = $manager;
+        }
         ?>
         <h1><?php echo $title; ?></h1>
         <div class="container">
-            <p>New user has been added to the system. Click <a href="../index.php">here</a> to go back.</p>
+            <p>Staff members details have been updated. Click <a href="../index.php">here</a> to go back.</p>
         </div>
         <?php
         require_once('../scripts/footer.php');
@@ -125,6 +144,7 @@ if (isset($_POST['submit'])) {
 ?>
 <h1><?php echo $title; ?></h1>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <input type="hidden" name="user_id" value ="<?php echo $user_id; ?>">
     <h3>Personal details:</h3>
     <div class="form-group container">
         <div class="col-md-6">
@@ -135,7 +155,11 @@ if (isset($_POST['submit'])) {
 
         <div class="col-md-6">
             <label for="manager">Manager</label>
-            <input type="checkbox" class="form-check-input" id="manager" name="manager" value="1"<?php if ($manager == '1') { echo "checked";} ?>/>
+            <input type="checkbox" class="form-check-input" id="manager" name="manager" value="1"<?php
+            if ($manager == '1') {
+                echo "checked";
+            }
+            ?>/>
         </div>
     </div>
 
@@ -167,20 +191,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <div class="form-group container">
-        <div class="col-md-6">
-            <label for="password">Password*</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" name="password"/>
-            <div class="error"><?php echo $password_error; ?></div>
-        </div>
-
-        <div class="col-md-6">
-            <label for="password1">Confirm Password*</label>
-            <input type="password" class="form-control" id="password1" placeholder="Reenter password" name="password1"/>
-            <div class="error"><?php echo $password1_error; ?></div>
-        </div>
-    </div>
-
     <h3>Contact details:</h3>
 
     <div class="form-group container">
@@ -197,7 +207,7 @@ if (isset($_POST['submit'])) {
 
     <div class="form-group container">
         <div class="container">
-            <button type="submit" name="submit" class="btn btn-success">Add new staff member</button>
+            <button type="submit" name="submit" class="btn btn-success">Modify staff members details</button>
             <button type="reset" value="Reset" class="btn btn-info">Reset</button>
             <a href="../index.php" class="btn btn-danger">Cancel</a>
         </div>

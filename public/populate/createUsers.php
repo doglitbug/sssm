@@ -78,7 +78,7 @@ function createSchedule($user_id, $start_date, $start_time, $end_time, $occurren
     echo "Created schedule:<br/>\n";
 }
 ?>
-<form method="get" action ="#">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <div class="form-group container">
 
         <label for="users">Create users</label>

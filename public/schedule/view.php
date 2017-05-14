@@ -58,7 +58,7 @@ echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
 ?>
 
 <div class="well well-sm">
-    <form method="get" action ="#">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
         <div class="form-group container">
             <input type="hidden" name="date" value="<?php echo date("d-m-Y", $start_date); ?>">
             <button type="submit" name="date" value="<?php echo date("d-m-Y"); ?>">Today</button>
