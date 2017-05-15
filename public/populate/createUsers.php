@@ -6,9 +6,18 @@ require_once('../scripts/header.php');
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
 //TODO Delete previous users
-////////// Create two users, one manager one not //////////
-createUser("1", "doglitbug", "password", "Arron", "Dick", "1", "021987654", "", "s_drac2@yahoo.com");
-createUser("2", "arthur", "password", "Arthur", "Gumball", "0", "02112345678", "034132152", "agumball@email.com");
+////////// Create 11 users, one manager rest not //////////
+createUser("1", "admin", "password", "Admin", "Account", "1", "021000000", "", "admin@example.com");
+createUser("2", "lilly", "password", "Lilly", "", "0", "021000001", "", "lilly@example.com");
+createUser("3", "belen", "password", "Belen", "", "0", "021000002", "", "belen@example.com");
+createUser("4", "kyra", "password", "Kyra", "", "0", "021000003", "", "kyra@example.com");
+createUser("5", "gloria", "password", "Gloria", "", "0", "021000004", "", "gloria@example.com");
+createUser("6", "jazmine", "password", "Jazmine", "", "0", "021000005", "", "jazmine@example.com");
+createUser("7", "lexi", "password", "Lexi", "", "0", "021000006", "", "lexi@example.com");
+createUser("9", "natasha", "password", "Natasha", "", "0", "021000008", "", "natasha@example.com");
+createUser("10", "heather", "password", "Heather", "", "0", "021000009", "", "heather@example.com");
+createUser("11", "crystal", "password", "Crystal", "", "0", "021000010", "", "crystal@example.com");
+
 
 ////////// Create some schedule data for users //////////
 $today = date("Y-m-d");
@@ -16,8 +25,8 @@ $monday_of_week = getMondayOfWeek($today);
 
 ////////// Schedule data for first user
 //Friday afternoon to saturday night all year
-createSchedule(1, "2017-01-06", "16:00", "24:00", 0, "Looking after Samuel");
-createSchedule(1, "2017-01-07", "00:00", "17:40", 0, "Looking after Samuel");
+createSchedule(1, "2017-01-06", "16:00", "24:00", 0, "Looking after kids");
+createSchedule(1, "2017-01-07", "00:00", "17:40", 0, "Looking after kids");
 
 //Add a couple of classes on monday this week, placed out of order on purpose
 createSchedule(1, date("Y-m-d", $monday_of_week), "12:00", "14:00", 1, "Computer class");
