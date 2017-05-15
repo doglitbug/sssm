@@ -35,16 +35,18 @@ while ($row = mysqli_fetch_array($result)) {
     echo "<li class='list-group-item'>Email: ".$row['email']."</li>\n";
 
     //Actions
-    echo "<li class='list-group-item'><a class='btn btn-primary' href='update.php?user_id=".$row['user_id']."'>Update</a>\n";
-    echo "<a class='btn btn-info' href='../schedule/view.php?user_id=".$row['user_id']."'>Schedule</a>\n";
+    echo "<li class='list-group-item'>\n";
     
     if (isManager()) {
+        echo "<a class='btn btn-primary' href='update.php?user_id=".$row['user_id']."'>Update</a>\n";
+        echo "<a class='btn btn-info' href='../schedule/view.php?user_id=".$row['user_id']."'>Schedule</a>\n";
         //Cannot delete yourself!
         if ($row['user_id']!=$_SESSION['user_id']){
             echo "<a class='btn btn-danger' href='remove.php?user_id=".$row['user_id']."'>Remove</a>\n";
         }
-        
     }
+    
+    //insert links that non managers can view?
     
     echo "</li></ul>\n";
     echo "</div>\n";

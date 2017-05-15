@@ -53,7 +53,7 @@ if ($user_id!=""){
 </div>
 <?php
 } else {
-    echo "Display user selector";
+    echo "Please remove users from the view all section <a href='view.php'>here</a>";
 }
 
 require_once("../scripts/footer.php");
