@@ -5,56 +5,73 @@ require_once('../scripts/header.php');
 //Turn off key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
-//TODO Delete previous users
-////////// Create 11 users, one manager rest not //////////
-createUser("1", "admin", "password", "Admin", "Account", "1", "021000000", "", "admin@example.com");
-createUser("2", "lilly", "password", "Lilly", "", "0", "021000001", "", "lilly@example.com");
-createUser("3", "belen", "password", "Belen", "", "0", "021000002", "", "belen@example.com");
-createUser("4", "kyra", "password", "Kyra", "", "0", "021000003", "", "kyra@example.com");
-createUser("5", "gloria", "password", "Gloria", "", "0", "021000004", "", "gloria@example.com");
-createUser("6", "jazmine", "password", "Jazmine", "", "0", "021000005", "", "jazmine@example.com");
-createUser("7", "lexi", "password", "Lexi", "", "0", "021000006", "", "lexi@example.com");
-createUser("9", "natasha", "password", "Natasha", "", "0", "021000008", "", "natasha@example.com");
-createUser("10", "heather", "password", "Heather", "", "0", "021000009", "", "heather@example.com");
-createUser("11", "crystal", "password", "Crystal", "", "0", "021000010", "", "crystal@example.com");
+//Create new users
+if (isset($_POST['users'])) {
+    //Remove previous users, note this will remove anything else in linked tables
+    $query = "DELETE FROM tbl_user";
+    mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t remove all users: ' . mysqli_error($GLOBALS['dbc']));
 
+////////// Create 11 users, one manager rest not //////////
+    createUser("1", "admin", "password", "Admin", "Account", "1", "021000000", "", "admin@example.com");
+    createUser("2", "lilly", "password", "Lilly", "", "0", "021000001", "", "lilly@example.com");
+    createUser("3", "belen", "password", "Belen", "", "0", "021000002", "", "belen@example.com");
+    createUser("4", "kyra", "password", "Kyra", "", "0", "021000003", "", "kyra@example.com");
+    createUser("5", "gloria", "password", "Gloria", "", "0", "021000004", "", "gloria@example.com");
+    createUser("6", "jazmine", "password", "Jazmine", "", "0", "021000005", "", "jazmine@example.com");
+    createUser("7", "lexi", "password", "Lexi", "", "0", "021000006", "", "lexi@example.com");
+    createUser("9", "natasha", "password", "Natasha", "", "0", "021000008", "", "natasha@example.com");
+    createUser("10", "heather", "password", "Heather", "", "0", "021000009", "", "heather@example.com");
+    createUser("11", "crystal", "password", "Crystal", "", "0", "021000010", "", "crystal@example.com");
+}
+
+//Add some schedule data
+if (isset($_POST['schedule'])) {
+    //Remove previous users, note this will remove anything else in linked tables
+    $query = "DELETE FROM tbl_schedule";
+    mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t remove all schedule data: ' . mysqli_error($GLOBALS['dbc']));
 
 ////////// Create some schedule data for users //////////
-$today = date("Y-m-d");
-$monday_of_week = getMondayOfWeek($today);
+    $today = date("Y-m-d");
+    $monday_of_week = getMondayOfWeek($today);
 
 ////////// Schedule data for first user
 //Friday afternoon to saturday night all year
-createSchedule(2, "2017-01-06", "16:00", "24:00", 0, "Looking after kids");
-createSchedule(2, "2017-01-07", "00:00", "17:40", 0, "Looking after kids");
+    createSchedule(2, "2017-01-06", "16:00", "24:00", 0, "Looking after kids");
+    createSchedule(2, "2017-01-07", "00:00", "17:40", 0, "Looking after kids");
 
 //Add a couple of classes on monday this week, placed out of order on purpose
-createSchedule(2, date("Y-m-d", $monday_of_week), "12:00", "14:00", 1, "Computer class");
-createSchedule(2, date("Y-m-d", $monday_of_week), "08:00", "10:00", 1, "Computer class");
+    createSchedule(2, date("Y-m-d", $monday_of_week), "12:00", "14:00", 1, "Computer class");
+    createSchedule(2, date("Y-m-d", $monday_of_week), "08:00", "10:00", 1, "Computer class");
 
 //Add a sunday to check ordering...sigh...
-createSchedule(2, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "5:00", "12:00", 2, "Going fishing");
+    createSchedule(2, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "5:00", "12:00", 2, "Going fishing");
 
 //Add a exam next week on tuesday
-createSchedule(2, date("Y-m-d", strtotime("+8 day", $monday_of_week)), "10:00", "12:00", 1, "Computer exam");
+    createSchedule(2, date("Y-m-d", strtotime("+8 day", $monday_of_week)), "10:00", "12:00", 1, "Computer exam");
 
 //Add a one off item last week Thursday
-createSchedule(2, date("Y-m-d", strtotime("-4 day", $monday_of_week)), "17:30", "19:30", 1, "Dinner out with mates");
+    createSchedule(2, date("Y-m-d", strtotime("-4 day", $monday_of_week)), "17:30", "19:30", 1, "Dinner out with mates");
 
 //Add a 3 week event starting last week Friday
-createSchedule(2, date("Y-m-d", strtotime("-3 day", $monday_of_week)), "8:00", "11:00", 3, "Attend gym");
+    createSchedule(2, date("Y-m-d", strtotime("-3 day", $monday_of_week)), "8:00", "11:00", 3, "Attend gym");
 
 //Add a 2 week event starting next week
-createSchedule(2, date("Y-m-d", strtotime("+9 day", $monday_of_week)), "9:00", "12:00", 2, "Attend gym(again)");
+    createSchedule(2, date("Y-m-d", strtotime("+9 day", $monday_of_week)), "9:00", "12:00", 2, "Attend gym(again)");
 
 ////////// Schedule data for user 2 //////////
 //User works mon-fri 8-5
-createSchedule(3, "2017-01-02", "08:00", "17:00", 0, "Work");
-createSchedule(3, "2017-01-03", "08:00", "17:00", 0, "Work");
-createSchedule(3, "2017-01-04", "08:00", "17:00", 0, "Work");
-createSchedule(3, "2017-01-05", "08:00", "17:00", 0, "Work");
-createSchedule(3, "2017-01-06", "08:00", "17:00", 0, "Work");
+    createSchedule(3, "2017-01-02", "08:00", "17:00", 0, "Work");
+    createSchedule(3, "2017-01-03", "08:00", "17:00", 0, "Work");
+    createSchedule(3, "2017-01-04", "08:00", "17:00", 0, "Work");
+    createSchedule(3, "2017-01-05", "08:00", "17:00", 0, "Work");
+    createSchedule(3, "2017-01-06", "08:00", "17:00", 0, "Work");
+}
 
+//Add some roster data
+if (isset($_POST['roster'])){
+    
+    
+}
 
 //Turn back on the key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 1');
