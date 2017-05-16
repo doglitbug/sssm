@@ -40,13 +40,31 @@ echo "<h1>View roster for week starting $pretty_date</h1>\n";
 </div>
 <?php
 //Build query for weeks roster
-$query = "SELECT user_id, username, start_date, start_time, end_time, description FROM tbl_roster LEFT JOIN tbl_user USING (user_id) 
+
+$query = "DROP table IF EXISTS thisWeeksShifts;
+DROP table IF EXISTS thisWeeksShifts2;
+
+CREATE temporary TABLE IF NOT EXISTS thisWeeksShifts AS (
+SELECT user_id, username, start_date, start_time, end_time, description FROM tbl_roster LEFT JOIN tbl_user USING (user_id)
 WHERE start_date>='" . date("Y-m-d", $start_date) . "' AND start_date<='" . date("Y-m-d", $end_date) . "'
+);
+
+CREATE temporary TABLE IF NOT EXISTS thisWeeksShifts2 AS (
+SELECT user_id, start_date, start_time, end_time, description FROM tbl_roster
+WHERE start_date>='" . date("Y-m-d", $start_date) . "' AND start_date<='" . date("Y-m-d", $end_date) . "'
+);
+
+SELECT * FROM thisWeeksShifts
 UNION
-select user_id, username, NULL, NULL, NULL, NULL FROM tbl_user
+SELECT user_id, tbl_user.username, start_date, start_time, end_time, description FROM thisWeeksShifts2 RIGHT JOIN tbl_user USING (user_id)
+WHERE thisWeeksShifts2.user_id IS NULL
+
 ORDER BY user_id, start_date, start_time";
 
-$result = mysqli_query($dbc, $query) or die('Error getting roster data: ' . mysqli_error($dbc));
+mysqli_multi_query($dbc, $query) or die('Error getting roster data: ' . mysqli_error($dbc));
+
+$result= mysqli_last_result($dbc);
+
 echo "<pre>\n";
 while ($row = mysqli_fetch_array($result)) {
     print_r($row);
@@ -57,13 +75,12 @@ $currentUser_id = 0;
 $currentDate=$start_date;
 //TODO Table header
 
-while ($row = mysqli_fetch_array($result)){
-if ($row['user_id']!=$currentUser_id){
-    //TODO Finish row
-    //TODO Start new row
-    $currentUser_id=$row['user_id'];
-}
+//while ($row = mysqli_fetch_array($result)){
+//if ($row['user_id']!=$currentUser_id){
+//    //TODO Finish row
+//    //TODO Start new row
+//    $currentUser_id=$row['user_id'];
+//}
     
-}
 require_once('../scripts/footer.php');
 ?>

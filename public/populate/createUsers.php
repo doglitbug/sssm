@@ -23,6 +23,7 @@ if (isset($_POST['users'])) {
     createUser("5", "gloria", "password", "Gloria", "", "0", "021000004", "", "gloria@example.com");
     createUser("6", "jazmine", "password", "Jazmine", "", "0", "021000005", "", "jazmine@example.com");
     createUser("7", "lexi", "password", "Lexi", "", "0", "021000006", "", "lexi@example.com");
+    createUser("8", "andrea", "password", "Andrea", "", "0", "021000007", "", "andrea@example.com");
     createUser("9", "natasha", "password", "Natasha", "", "0", "021000008", "", "natasha@example.com");
     createUser("10", "heather", "password", "Heather", "", "0", "021000009", "", "heather@example.com");
     createUser("11", "crystal", "password", "Crystal", "", "0", "021000010", "", "crystal@example.com");
