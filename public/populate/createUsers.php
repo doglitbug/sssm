@@ -25,35 +25,35 @@ $monday_of_week = getMondayOfWeek($today);
 
 ////////// Schedule data for first user
 //Friday afternoon to saturday night all year
-createSchedule(1, "2017-01-06", "16:00", "24:00", 0, "Looking after kids");
-createSchedule(1, "2017-01-07", "00:00", "17:40", 0, "Looking after kids");
+createSchedule(2, "2017-01-06", "16:00", "24:00", 0, "Looking after kids");
+createSchedule(2, "2017-01-07", "00:00", "17:40", 0, "Looking after kids");
 
 //Add a couple of classes on monday this week, placed out of order on purpose
-createSchedule(1, date("Y-m-d", $monday_of_week), "12:00", "14:00", 1, "Computer class");
-createSchedule(1, date("Y-m-d", $monday_of_week), "08:00", "10:00", 1, "Computer class");
+createSchedule(2, date("Y-m-d", $monday_of_week), "12:00", "14:00", 1, "Computer class");
+createSchedule(2, date("Y-m-d", $monday_of_week), "08:00", "10:00", 1, "Computer class");
 
 //Add a sunday to check ordering...sigh...
-createSchedule(1, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "5:00", "12:00", 2, "Going fishing");
+createSchedule(2, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "5:00", "12:00", 2, "Going fishing");
 
 //Add a exam next week on tuesday
-createSchedule(1, date("Y-m-d", strtotime("+8 day", $monday_of_week)), "10:00", "12:00", 1, "Computer exam");
+createSchedule(2, date("Y-m-d", strtotime("+8 day", $monday_of_week)), "10:00", "12:00", 1, "Computer exam");
 
 //Add a one off item last week Thursday
-createSchedule(1, date("Y-m-d", strtotime("-4 day", $monday_of_week)), "17:30", "19:30", 1, "Dinner out with mates");
+createSchedule(2, date("Y-m-d", strtotime("-4 day", $monday_of_week)), "17:30", "19:30", 1, "Dinner out with mates");
 
 //Add a 3 week event starting last week Friday
-createSchedule(1, date("Y-m-d", strtotime("-3 day", $monday_of_week)), "8:00", "11:00", 3, "Attend gym");
+createSchedule(2, date("Y-m-d", strtotime("-3 day", $monday_of_week)), "8:00", "11:00", 3, "Attend gym");
 
 //Add a 2 week event starting next week
-createSchedule(1, date("Y-m-d", strtotime("+9 day", $monday_of_week)), "9:00", "12:00", 2, "Attend gym(again)");
+createSchedule(2, date("Y-m-d", strtotime("+9 day", $monday_of_week)), "9:00", "12:00", 2, "Attend gym(again)");
 
 ////////// Schedule data for user 2 //////////
 //User works mon-fri 8-5
-createSchedule(2, "2017-01-02", "08:00", "17:00", 0, "Work");
-createSchedule(2, "2017-01-03", "08:00", "17:00", 0, "Work");
-createSchedule(2, "2017-01-04", "08:00", "17:00", 0, "Work");
-createSchedule(2, "2017-01-05", "08:00", "17:00", 0, "Work");
-createSchedule(2, "2017-01-06", "08:00", "17:00", 0, "Work");
+createSchedule(3, "2017-01-02", "08:00", "17:00", 0, "Work");
+createSchedule(3, "2017-01-03", "08:00", "17:00", 0, "Work");
+createSchedule(3, "2017-01-04", "08:00", "17:00", 0, "Work");
+createSchedule(3, "2017-01-05", "08:00", "17:00", 0, "Work");
+createSchedule(3, "2017-01-06", "08:00", "17:00", 0, "Work");
 
 
 //Turn back on the key checks
