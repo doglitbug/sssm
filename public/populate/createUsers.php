@@ -5,6 +5,10 @@ require_once('../scripts/header.php');
 //Turn off key checks
 mysqli_query($GLOBALS['dbc'], 'SET foreign_key_checks = 0');
 
+//Yeah lets just add data from today
+$today = date("Y-m-d");
+$monday_of_week = getMondayOfWeek($today);
+
 //Create new users
 if (isset($_POST['users'])) {
     //Remove previous users, note this will remove anything else in linked tables
@@ -26,13 +30,9 @@ if (isset($_POST['users'])) {
 
 //Add some schedule data
 if (isset($_POST['schedule'])) {
-    //Remove previous users, note this will remove anything else in linked tables
+    //Remove previous schedule data(may already be removed by create users)
     $query = "DELETE FROM tbl_schedule";
     mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t remove all schedule data: ' . mysqli_error($GLOBALS['dbc']));
-
-////////// Create some schedule data for users //////////
-    $today = date("Y-m-d");
-    $monday_of_week = getMondayOfWeek($today);
 
 ////////// Schedule data for first user
 //Friday afternoon to saturday night all year
@@ -68,9 +68,48 @@ if (isset($_POST['schedule'])) {
 }
 
 //Add some roster data
-if (isset($_POST['roster'])){
-    
-    
+if (isset($_POST['roster'])) {
+    //Remove previous roster data(may already be removed by create users)
+    $query = "DELETE FROM tbl_roster";
+    mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t remove all roster data: ' . mysqli_error($GLOBALS['dbc']));
+
+    //Open shifts
+    createRoster(NULL, date("Y-m-d", strtotime("+2 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(NULL, date("Y-m-d", strtotime("+2 day", $monday_of_week)), "18:00", "20:00", "Help Close store");
+    createRoster(NULL, date("Y-m-d", strtotime("+3 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(NULL, date("Y-m-d", strtotime("+3 day", $monday_of_week)), "18:00", "20:00", "Help Close store");
+
+    //User 2
+    createRoster(2, date("Y-m-d", $monday_of_week), "8:00", "16:00", "Open store");
+    createRoster(2, date("Y-m-d", strtotime("+1 day", $monday_of_week)), "8:00", "16:00", "Open store");
+    createRoster(2, date("Y-m-d", strtotime("+2 day", $monday_of_week)), "8:00", "16:00", "Open store");
+    createRoster(2, date("Y-m-d", strtotime("+3 day", $monday_of_week)), "8:00", "16:00", "Open store");
+    createRoster(2, date("Y-m-d", strtotime("+4 day", $monday_of_week)), "8:00", "16:00", "Open store");
+
+    //User 3
+    createRoster(3, date("Y-m-d", $monday_of_week), "12:00", "20:00", "Lunch to close");
+    createRoster(3, date("Y-m-d", strtotime("+1 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+    createRoster(3, date("Y-m-d", strtotime("+2 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+    createRoster(3, date("Y-m-d", strtotime("+5 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+    createRoster(3, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+
+    //User 6
+    createRoster(6, date("Y-m-d", strtotime("+3 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+    createRoster(6, date("Y-m-d", strtotime("+4 day", $monday_of_week)), "12:00", "20:00", "Lunch to close");
+    createRoster(6, date("Y-m-d", strtotime("+5 day", $monday_of_week)), "8:00", "16:00", "Open store");
+    createRoster(6, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "8:00", "16:00", "Open store");
+
+    //User 7(Has double shifts)
+    createRoster(7, date("Y-m-d", $monday_of_week), "8:00", "10:00", "Help open store");
+    createRoster(7, date("Y-m-d", $monday_of_week), "18:00", "20:00", "Help close store");
+    createRoster(7, date("Y-m-d", strtotime("+1 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(7, date("Y-m-d", strtotime("+1 day", $monday_of_week)), "18:00", "20:00", "Help close store");
+    createRoster(7, date("Y-m-d", strtotime("+4 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(7, date("Y-m-d", strtotime("+4 day", $monday_of_week)), "18:00", "20:00", "Help close store");
+    createRoster(7, date("Y-m-d", strtotime("+5 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(7, date("Y-m-d", strtotime("+5 day", $monday_of_week)), "18:00", "20:00", "Help close store");
+    createRoster(7, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "8:00", "10:00", "Help open store");
+    createRoster(7, date("Y-m-d", strtotime("+6 day", $monday_of_week)), "18:00", "20:00", "Help close store");
 }
 
 //Turn back on the key checks
@@ -88,6 +127,19 @@ function createUser($user_id, $username, $password, $firstname, $lastname, $mana
     mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t add user: ' . mysqli_error($GLOBALS['dbc']));
 
     echo "Created user: " . $username . "<br/>\n";
+}
+
+function createRoster($user_id, $start_date, $start_time, $end_time, $description) {
+    //Reformat times
+    $start_time .= ":00";
+    $end_time .= ":00";
+    //Build insert query
+    $query = "INSERT INTO tbl_roster (user_id, start_date, start_time, end_time, description) VALUES "
+            . "('$user_id', '$start_date', '$start_time', '$end_time', '$description')";
+    //Execute query
+    mysqli_query($GLOBALS['dbc'], $query) or die('Couldn\'t add roster data: ' . mysqli_error($GLOBALS['dbc']));
+
+    echo "Created roster data.<br/>\n";
 }
 
 function createSchedule($user_id, $start_date, $start_time, $end_time, $occurrences, $description) {
