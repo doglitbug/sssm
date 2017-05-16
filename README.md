@@ -24,3 +24,6 @@ define('DB_PASSWORD', 'root');
 define('DB_NAME', 'sssm');
 ?>
 ```
+The file ERD.mwb can be used to forward engineer the database structure using Workbench
+
+Loading http://localhost:8080/populate/createUsers.php will populate sample data
