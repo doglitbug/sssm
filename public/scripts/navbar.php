@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav">
                     <?php
                     //Users links, manager only
-                    if (isset($_SESSION['manager']) && $_SESSION['manager'] == '1') {
+                    if (isManager()) {
                         ?>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Staff management<span class="caret"></span></a>
@@ -32,8 +32,20 @@
                         <?php
                     }
                     ?>
-                    <li><a href="../roster/view.php">Roster</a></li>
-                    <li><a href="../available/view.php">Available shifts</a></li>
+                    <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Roster<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../roster/view.php">View all</a></li>
+                                <li><a href="../roster/view.php?user_id=<?php echo $_SESSION['user_id']; ?>">View mine only</a></li>
+                                <?php
+                                if (isManager()){
+                                echo "<li><a href='../roster/edit.php'>Edit Roster</a></li>";
+                                }
+                                ?>
+                            </ul>
+                        </li>
+                    
+                    
                     <li><a href="../schedule/view.php">Schedule</a></li>
                 </ul>
 
