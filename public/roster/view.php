@@ -40,40 +40,27 @@ echo "<h1>View roster for week starting $pretty_date</h1>\n";
 </div>
 <?php
 //Build query for weeks roster
-
 $query = "
-DROP table IF EXISTS thisWeeksShifts;
-DROP table IF EXISTS thisWeeksShifts2;
-
-CREATE temporary TABLE IF NOT EXISTS thisWeeksShifts AS (
-SELECT roster_id, user_id, username, start_date, start_time, end_time, description FROM tbl_roster LEFT JOIN tbl_user USING (user_id)
-WHERE start_date>='" . date("Y-m-d", $start_date) . "' AND start_date<='" . date("Y-m-d", $end_date) . "'
-);
-
-CREATE temporary TABLE IF NOT EXISTS thisWeeksShifts2 AS (
 SELECT roster_id, user_id, start_date, start_time, end_time, description FROM tbl_roster
 WHERE start_date>='" . date("Y-m-d", $start_date) . "' AND start_date<='" . date("Y-m-d", $end_date) . "'
-);
-
-SELECT * FROM thisWeeksShifts
-UNION
-SELECT roster_id, user_id, tbl_user.username, start_date, start_time, end_time, description FROM thisWeeksShifts2 RIGHT JOIN tbl_user USING (user_id)
-WHERE thisWeeksShifts2.user_id IS NULL
-
 ORDER BY user_id, start_date, start_time";
 
-mysqli_multi_query($dbc, $query) or die('Error getting roster data: ' . mysqli_error($dbc));
+$shifts = mysqli_query($dbc, $query) or die('Error getting roster data: ' . mysqli_error($dbc));
 
-$result = mysqli_last_result($dbc);
+//Build query for user data
+$query = "SELECT user_id, username FROM tbl_user ORDER BY user_id";
+//Note, the order must match the roster query!
+$userResults = mysqli_query($dbc, $query) or die('Error getting user data: ' . mysqli_error($dbc));
+//Build false user for Open shifts, format must match the result above!
+$users[0] = array("user_id"=>"0", "username"=>"Open shifts");
+//Add both to list of users
+while ($user = mysqli_fetch_assoc($userResults)) {
+    array_push($users, $user);
+}
 
-//echo "<pre>\n";
-//while ($shift = mysqli_fetch_row($result)) {
-//    print_r($shift);
-//}
-//echo "</pre>\n";
 ?>
 <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -88,36 +75,25 @@ $result = mysqli_last_result($dbc);
         <tbody>
             <?php
             //Get first shift
-            $shift = mysqli_fetch_array($result);
+            $shift = mysqli_fetch_array($shifts);
             //Loop through all rows(users)
-            while ($shift) {
-                //Get current user
-                $current_user = $shift['user_id'];
-                $empty=false;
-                echo "<tr><td>" . $shift['username'] . "</td>";
+            while ($user=array_shift($users)) {
+
+                echo "<tr><td><b>" . $user['username'] . "</b></td>";
 
                 //Loop through all columns(days)
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
-                    $output = false;
                     echo "<td>";
-                    //Check for empty row(user has no shifts in the week
-                    if ($shift['roster_id'] == NULL) {
-                        //Get next shift
-                        $empty=true;
-                    }
-
-
-                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $current_user == $shift['user_id']) {
+                    $output=false;
+                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id']==$user['user_id']) {
                         if ($output) {
                             echo "<br/>";
                         }
-                        echo date("H:i", strtotime($shift['start_time']))."-".date("H:i", strtotime($shift['end_time']));
+                        echo date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
                         $output = true;
                         //Get next shift
-                        $shift = mysqli_fetch_array($result);
+                        $shift = mysqli_fetch_array($shifts);
                     }
-
-
 
                     if ($output == false) {
                         echo "&nbsp;";
@@ -125,10 +101,7 @@ $result = mysqli_last_result($dbc);
 
                     echo "</td>";
                 }
-                if ($empty){
-                    $shift = mysqli_fetch_array($result);
-                }
-                echo "</tr>";
+                echo "</tr>\n";
             }
             ?>
         </tbody>
