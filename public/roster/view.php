@@ -52,12 +52,11 @@ $query = "SELECT user_id, username FROM tbl_user ORDER BY user_id";
 //Note, the order must match the roster query!
 $userResults = mysqli_query($dbc, $query) or die('Error getting user data: ' . mysqli_error($dbc));
 //Build false user for Open shifts, format must match the result above!
-$users[0] = array("user_id"=>"0", "username"=>"Open shifts");
+$users[0] = array("user_id" => "0", "username" => "Open shifts");
 //Add both to list of users
 while ($user = mysqli_fetch_assoc($userResults)) {
     array_push($users, $user);
 }
-
 ?>
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
@@ -77,26 +76,28 @@ while ($user = mysqli_fetch_assoc($userResults)) {
             //Get first shift
             $shift = mysqli_fetch_array($shifts);
             //Loop through all rows(users)
-            while ($user=array_shift($users)) {
+            while ($user = array_shift($users)) {
 
                 echo "<tr><td><b>" . $user['username'] . "</b></td>";
 
                 //Loop through all columns(days)
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
                     //Create an id for this user/date combination
-                    $id=$user['user_id']."-".date("Y-m-d", $current_date);
-                    echo "<td id='$id'>";
-                    $output=false;
-                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id']==$user['user_id']) {
-                        //If we have already put a shift in this place, place in another
+                    $id = $user['user_id'] . "-" . date("Y-m-d", $current_date);
+                    echo "<td id='$id' ondrop=\"drop(event, '$id')\" ondragover='allowDrop(event)'>";
+                    $output = false;
+                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id'] == $user['user_id']) {
+                        //If we have already put a shift in this place, place in on another line
                         if ($output) {
-                            echo "<br/>";
+                            //echo "<br/>";
                         }
-                        
+
                         //Build pretty card for shift
-                        echo "<a href='#'><div class='shift ";
+                        //echo "<a href='edit".$shift['roster_id']."'>";
+                        //Enable draggable
+                        echo "<div draggable='true' ondragstart='drag(event)' class='shift ";
                         //Randomly color a shift, yes lazy I know...
-                        switch (rand(0,3)){
+                        switch (rand(0, 3)) {
                             case 0:
                                 echo "alert-success";
                                 break;
@@ -110,13 +111,14 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                                 echo "alert-danger";
                                 break;
                         }
-                        echo "'>";
-                        echo "<div class='title'>".date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
-                        
+                        echo "' id='" . $shift['roster_id'] . "'>";
+                        echo "<div class='title'>" . date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
+
                         echo "</div>";
-                        echo "<div class='body'>".$shift['description']."</div>";
-                        echo "</div></a>";
-                        
+                        echo "<div class='body'>" . $shift['description'] . "</div>";
+                        //Add other data such as location or total hours?
+                        echo "</div>";
+
                         $output = true;
                         //Get next shift
                         $shift = mysqli_fetch_array($shifts);
@@ -125,7 +127,6 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                     if ($output == false) {
 
                         echo "<a href='#'><span class='glyphicon glyphicon-plus' aria-hidden='true' aria-label='Add shift'></span></a>";
-
                     }
 
                     echo "</td>";
@@ -137,6 +138,33 @@ while ($user = mysqli_fetch_assoc($userResults)) {
     </table>
 </div>
 
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev, ui) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+
+        //Check it is not dropped on a shift
+        if (ev.target.getAttribute('id') !== null) {
+            //TODO Move in database
+            console.log("Roster id: " + data);
+            console.log("Destination id: " + ui);
+            ev.target.appendChild(document.getElementById(data));
+        }
+
+    }
+
+    //ev.target.appendChild(document.getElementById(data));
+    //var dest_id = ev.target.getAttribute('id');
+
+</script>
 <?php
 require_once('../scripts/footer.php');
 ?>
