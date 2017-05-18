@@ -83,20 +83,49 @@ while ($user = mysqli_fetch_assoc($userResults)) {
 
                 //Loop through all columns(days)
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
-                    echo "<td>";
+                    //Create an id for this user/date combination
+                    $id=$user['user_id']."-".date("Y-m-d", $current_date);
+                    echo "<td id='$id'>";
                     $output=false;
                     while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id']==$user['user_id']) {
+                        //If we have already put a shift in this place, place in another
                         if ($output) {
                             echo "<br/>";
                         }
-                        echo date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
+                        
+                        //Build pretty card for shift
+                        echo "<a href='#'><div class='shift ";
+                        //Randomly color a shift, yes lazy I know...
+                        switch (rand(0,3)){
+                            case 0:
+                                echo "alert-success";
+                                break;
+                            case 1:
+                                echo "alert-info";
+                                break;
+                            case 2:
+                                echo "alert-warning";
+                                break;
+                            case 3:
+                                echo "alert-danger";
+                                break;
+                        }
+                        echo "'>";
+                        echo "<div class='title'>".date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
+                        
+                        echo "</div>";
+                        echo "<div class='body'>".$shift['description']."</div>";
+                        echo "</div></a>";
+                        
                         $output = true;
                         //Get next shift
                         $shift = mysqli_fetch_array($shifts);
                     }
 
                     if ($output == false) {
-                        echo "&nbsp;";
+
+                        echo "<a href='#'><span class='glyphicon glyphicon-plus' aria-hidden='true' aria-label='Add shift'></span></a>";
+
                     }
 
                     echo "</td>";
