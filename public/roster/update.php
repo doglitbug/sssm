@@ -18,7 +18,7 @@ try {
     }
 
     //Build update query
-    $query = "UPDATE tbl_rosters SET user_id=$user_id, "
+    $query = "UPDATE tbl_roster SET user_id=$user_id, "
             . "start_date='$start_date', start_time='$start_time', "
             . "end_time='$end_time', description='$description' WHERE roster_id='$roster_id'";
 
