@@ -52,12 +52,11 @@ $query = "SELECT user_id, username FROM tbl_user ORDER BY user_id";
 //Note, the order must match the roster query!
 $userResults = mysqli_query($dbc, $query) or die('Error getting user data: ' . mysqli_error($dbc));
 //Build false user for Open shifts, format must match the result above!
-$users[0] = array("user_id"=>"0", "username"=>"Open shifts");
+$users[0] = array("user_id" => "0", "username" => "Open shifts");
 //Add both to list of users
 while ($user = mysqli_fetch_assoc($userResults)) {
     array_push($users, $user);
 }
-
 ?>
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
@@ -77,30 +76,30 @@ while ($user = mysqli_fetch_assoc($userResults)) {
             //Get first shift
             $shift = mysqli_fetch_array($shifts);
             //Loop through all rows(users)
-            while ($user=array_shift($users)) {
+            while ($user = array_shift($users)) {
 
                 echo "<tr><td><b>" . $user['username'] . "</b></td>";
 
                 //Loop through all columns(days)
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
                     //Create an id for this user/date combination
-                    $id=$user['user_id']."-".date("Y-m-d", $current_date);
+                    $id = $user['user_id'] . "-" . date("Y-m-d", $current_date);
                     echo "<td id='$id'>";
-                    $output=false;
-                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id']==$user['user_id']) {
+                    $output = false;
+                    while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id'] == $user['user_id']) {
                         //If we have already put a shift in this place, place in another
                         if ($output) {
                             echo "<br/>";
                         }
-                        
+
                         //Build pretty card for shift
                         echo "<div class='shift'>";
-                        echo "<div class='title'>".date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
-                        
+                        echo "<div class='title'>" . date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
+
                         echo "</div>";
-                        echo "<div class='body'>".$shift['description']."</div>";
+                        echo "<div class='body'>" . $shift['description'] . "</div>";
                         echo "</div>";
-                        
+
                         $output = true;
                         //Get next shift
                         $shift = mysqli_fetch_array($shifts);

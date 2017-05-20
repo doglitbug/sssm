@@ -115,7 +115,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         echo "' id='" . $shift['roster_id'] . "'>";
 
                         echo "<div class='start_time'>" . date("H:i", strtotime($shift['start_time'])) . "</div> - ";
-                        echo "<div class='end_time'>". date("H:i", strtotime($shift['end_time'])) . "</div>";
+                        echo "<div class='end_time'>" . date("H:i", strtotime($shift['end_time'])) . "</div>";
                         echo "<div class='description'>" . $shift['description'] . "</div>";
                         //Add other data such as location or total hours?
                         echo "</div>";
@@ -154,34 +154,36 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         //Check it is not dropped on a shift
         if (ev.target.getAttribute('id') !== null) {
             //Get all the required data
-            var data = ev.dataTransfer.getData("text");
-
-            var roster_id = data;
+            var source_shift = ev.dataTransfer.getData("text");
+            var roster_id = source_shift;
             //Get point to split user_id from data
             var split = ui.indexOf('-');
             var user_id = ui.substring(0, split);
-            var start_date = ui.substring(split+1);
-            var start_time = document.getElementById(data).getElementsByClassName("start_time")[0].innerHTML;
-            var end_time = document.getElementById(data).getElementsByClassName("end_time")[0].innerHTML;
-            var description = document.getElementById(data).getElementsByClassName("description")[0].innerHTML;
-            
-            //TODO Move in database
+            var start_date = ui.substring(split + 1);
+            var start_time = document.getElementById(source_shift).getElementsByClassName("start_time")[0].innerHTML;
+            var end_time = document.getElementById(source_shift).getElementsByClassName("end_time")[0].innerHTML;
+            var description = document.getElementById(source_shift).getElementsByClassName("description")[0].innerHTML;
 
-            console.log("roster_id: " + roster_id);
-            console.log("user_id: " + user_id);
-            console.log("start_date: " + start_date);
-            console.log("start_time: " + start_time);
-            console.log("end_time: " + end_time);
-            console.log("description: "+ description);
-            
-            ev.target.appendChild(document.getElementById(data));
+            //Lets use some jQuery here to move shift in database
+            //TODO use jQuery for everything...
+            $.getJSON({
+                type: 'post',
+                url: 'update.php',
+                data: $.param({'roster_id': roster_id, 'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
+                success: function (data, status, jqXHR) {
+                    if (data.success) {
+                        console.log(data.message);
+                        ev.target.appendChild(document.getElementById(source_shift));
+                    } else {
+                        //TODO Deal with error
+                    }
+
+                },
+                error: function (data, status, headers, config) {
+                    //TODO Deal with serious error
+                }});
         }
-
     }
-
-    //ev.target.appendChild(document.getElementById(data));
-    //var dest_id = ev.target.getAttribute('id');
-
 </script>
 <?php
 require_once('../scripts/footer.php');
