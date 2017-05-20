@@ -86,6 +86,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                     $id = $user['user_id'] . "-" . date("Y-m-d", $current_date);
                     echo "<td id='$id' ondrop=\"drop(event, '$id')\" ondragover='allowDrop(event)'>";
                     $output = false;
+                    //Date format as advised by RFC 3339/ISO 8601 "wire format": YYYY-MM-DD
                     while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id'] == $user['user_id']) {
                         //If we have already put a shift in this place, place in on another line
                         if ($output) {
@@ -112,10 +113,10 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                                 break;
                         }
                         echo "' id='" . $shift['roster_id'] . "'>";
-                        echo "<div class='title'>" . date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
 
-                        echo "</div>";
-                        echo "<div class='body'>" . $shift['description'] . "</div>";
+                        echo "<div class='start_time'>" . date("H:i", strtotime($shift['start_time'])) . "</div> - ";
+                        echo "<div class='end_time'>". date("H:i", strtotime($shift['end_time'])) . "</div>";
+                        echo "<div class='description'>" . $shift['description'] . "</div>";
                         //Add other data such as location or total hours?
                         echo "</div>";
 
@@ -149,13 +150,30 @@ while ($user = mysqli_fetch_assoc($userResults)) {
 
     function drop(ev, ui) {
         ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
 
         //Check it is not dropped on a shift
         if (ev.target.getAttribute('id') !== null) {
+            //Get all the required data
+            var data = ev.dataTransfer.getData("text");
+
+            var roster_id = data;
+            //Get point to split user_id from data
+            var split = ui.indexOf('-');
+            var user_id = ui.substring(0, split);
+            var start_date = ui.substring(split+1);
+            var start_time = document.getElementById(data).getElementsByClassName("start_time")[0].innerHTML;
+            var end_time = document.getElementById(data).getElementsByClassName("end_time")[0].innerHTML;
+            var description = document.getElementById(data).getElementsByClassName("description")[0].innerHTML;
+            
             //TODO Move in database
-            console.log("Roster id: " + data);
-            console.log("Destination id: " + ui);
+
+            console.log("roster_id: " + roster_id);
+            console.log("user_id: " + user_id);
+            console.log("start_date: " + start_date);
+            console.log("start_time: " + start_time);
+            console.log("end_time: " + end_time);
+            console.log("description: "+ description);
+            
             ev.target.appendChild(document.getElementById(data));
         }
 
