@@ -114,8 +114,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         }
                         echo "' id='" . $shift['roster_id'] . "'>";
 
-                        echo "<div class='start_time'>" . date("H:i", strtotime($shift['start_time'])) . "</div> - ";
-                        echo "<div class='end_time'>" . date("H:i", strtotime($shift['end_time'])) . "</div>";
+                        echo "<div class='time'>" . date("H:i", strtotime($shift['start_time'])) . " - " . date("H:i", strtotime($shift['end_time'])) . "</div>";
                         echo "<div class='description'>" . $shift['description'] . "</div>";
                         //Add other data such as location or total hours?
                         echo "</div>";
@@ -123,11 +122,6 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         $output = true;
                         //Get next shift
                         $shift = mysqli_fetch_array($shifts);
-                    }
-
-                    if ($output == false) {
-
-                        echo "<a href='#'><span class='glyphicon glyphicon-plus' aria-hidden='true' aria-label='Add shift'></span></a>";
                     }
 
                     echo "</td>";
@@ -144,14 +138,18 @@ while ($user = mysqli_fetch_assoc($userResults)) {
     //Attach click for adding a new shift
     $(document).on("click", "#shifttable td.shifts", function (e) {
         var data = $(this).attr('id');
-        console.log($(this));
-        alert(data);
+        //Split up user_id and date from destination
+        var split = data.indexOf('-');
+        var user_id = data.substring(0, split);
+        var start_date = data.substring(split + 1);
+        alert("Add new shift for: "+user_id+" on "+start_date);
     });
 
     //Attach click for editing a shift
     $(document).on("click", ".shift", function (event) {
         //Stop the add new shift part
         event.stopPropagation();
+
         var roster_id = $(this).attr('id');
         alert("Edit shift :" + roster_id);
     });
@@ -172,14 +170,19 @@ while ($user = mysqli_fetch_assoc($userResults)) {
             //Get all the required data
             var source_shift = ev.dataTransfer.getData("text");
             var roster_id = source_shift;
-            //Get point to split user_id from data
+
+            //Split up user_id and date from destination
             var split = ui.indexOf('-');
             var user_id = ui.substring(0, split);
             var start_date = ui.substring(split + 1);
-            var start_time = document.getElementById(source_shift).getElementsByClassName("start_time")[0].innerHTML;
-            var end_time = document.getElementById(source_shift).getElementsByClassName("end_time")[0].innerHTML;
-            var description = document.getElementById(source_shift).getElementsByClassName("description")[0].innerHTML;
 
+            //Split up time and get start_time and end_time
+            var time = $('#' + source_shift).children(".time").text();
+            var split = time.indexOf("-");
+            var start_time = time.substring(0, split - 1);//Adjust because divider is " - "
+            var end_time = time.substring(split + 2);//Adjust because divider is " - ";
+
+            var description = $('#' + source_shift).children(".description").text();
             //Lets use some jQuery here to move shift in database
             //TODO use jQuery for everything...
             $.getJSON({
