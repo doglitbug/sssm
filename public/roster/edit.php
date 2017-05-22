@@ -59,7 +59,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
 }
 ?>
 <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover" id="shifts">
+    <table class="table table-bordered table-striped table-hover" id="shifttable">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -84,7 +84,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
                     //Create an id for this user/date combination
                     $id = $user['user_id'] . "-" . date("Y-m-d", $current_date);
-                    echo "<td id='$id' class='shift' ondrop=\"drop(event, '$id')\" ondragover='allowDrop(event)'>";
+                    echo "<td id='$id' class='shifts' ondrop=\"drop(event, '$id')\" ondragover='allowDrop(event)'>";
                     $output = false;
                     //Date format as advised by RFC 3339/ISO 8601 "wire format": YYYY-MM-DD
                     while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id'] == $user['user_id']) {
@@ -141,11 +141,20 @@ while ($user = mysqli_fetch_assoc($userResults)) {
 
 <script>
     ////// Functions for adding new shifts
-    $(document).on("click", "#shifts td.shift", function(e) {
-                var data = $(this).attr('id');
-                console.log($(this));
-                alert (data);
-            }); 
+    //Attach click for adding a new shift
+    $(document).on("click", "#shifttable td.shifts", function (e) {
+        var data = $(this).attr('id');
+        console.log($(this));
+        alert(data);
+    });
+
+    //Attach click for editing a shift
+    $(document).on("click", ".shift", function (event) {
+        //Stop the add new shift part
+        event.stopPropagation();
+        var roster_id = $(this).attr('id');
+        alert("Edit shift :" + roster_id);
+    });
     ////// Functions for moving shifts
     function allowDrop(ev) {
         ev.preventDefault();
