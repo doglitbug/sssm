@@ -168,67 +168,48 @@ while ($user = mysqli_fetch_assoc($userResults)) {
     $(function () {
         $(".shifts").droppable({
             drop: function (event, ui) {
+                //Get id of moved shift(same as in database)
                 var roster_id = ui.draggable.attr('id');
 
-                console.log("Roster id: " + roster_id);
-                console.log("Target name: " + event.target.id);
+                //Get all the required data
+                var target_location = event.target.id;
 
-                ui.draggable.appendTo($(this)).css({top: '0px', left: '0px'});
+                //Split up user_id and date of target
+                var split = target_location.indexOf('-');
+                var user_id = target_location.substring(0, split);
+                var start_date = target_location.substring(split + 1);
+
+                //Split up time and get start_time and end_time
+                var time = ui.draggable.children(".time").text();
+                var split = time.indexOf("-");
+                var start_time = time.substring(0, split - 1);//Adjust because divider is " - "
+                var end_time = time.substring(split + 2);//Adjust because divider is " - ";
+
+                var description = ui.draggable.children(".description").text();
+                //Lets use some jQuery here to move shift in database
+                //TODO use jQuery for everything...
+                $.getJSON({
+                    type: 'post',
+                    url: 'update.php',
+                    data: $.param({'roster_id': roster_id, 'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
+                    success: function (data, status, jqXHR) {
+                        if (data.success) {
+                            console.log(data.message);
+                            //Move shift into dropped position
+                            ui.draggable.appendTo(event.target).css({top: '0px', left: '0px'});
+                        } else {
+                            //TODO Deal with error
+                        }
+
+                    },
+                    error: function (data, status, headers, config) {
+                        //TODO Deal with serious error
+                    }});
+
             }
         });
     });
 
-    ////// Functions for moving shifts
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
-
-    function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
-    }
-
-    function drop(ev, ui) {
-        ev.preventDefault();
-        console.log(ev.target.getAttribute('id'));
-        //Check it is not dropped on a shift
-
-        if (ev.target.getAttribute('id') !== null) {
-            //Get all the required data
-            var source_shift = ev.dataTransfer.getData("text");
-            var roster_id = source_shift;
-
-            //Split up user_id and date from destination
-            var split = ui.indexOf('-');
-            var user_id = ui.substring(0, split);
-            var start_date = ui.substring(split + 1);
-
-            //Split up time and get start_time and end_time
-            var time = $('#' + source_shift).children(".time").text();
-            var split = time.indexOf("-");
-            var start_time = time.substring(0, split - 1);//Adjust because divider is " - "
-            var end_time = time.substring(split + 2);//Adjust because divider is " - ";
-
-            var description = $('#' + source_shift).children(".description").text();
-            //Lets use some jQuery here to move shift in database
-            //TODO use jQuery for everything...
-            $.getJSON({
-                type: 'post',
-                url: 'update.php',
-                data: $.param({'roster_id': roster_id, 'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
-                success: function (data, status, jqXHR) {
-                    if (data.success) {
-                        console.log(data.message);
-                        ev.target.appendChild(document.getElementById(source_shift));
-                    } else {
-                        //TODO Deal with error
-                    }
-
-                },
-                error: function (data, status, headers, config) {
-                    //TODO Deal with serious error
-                }});
-        }
-    }
 </script>
 <?php
 require_once('../scripts/footer.php');
