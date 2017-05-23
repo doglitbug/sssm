@@ -169,11 +169,12 @@ while ($user = mysqli_fetch_assoc($userResults)) {
     $(function () {
         $(".shifts").droppable({
             drop: function (event, ui) {
-                console.log("Roster id: " + ui.draggable.attr('id'));
-                console.log($(this));
-                console.log(ui.draggable);
-                console.log(event.target);
-                ui.draggable.appendTo($(this));
+                var roster_id = ui.draggable.attr('id');
+
+                console.log("Roster id: " + roster_id);
+                console.log(event.target.id);
+
+                ui.draggable.appendTo($(this)).css({top:'0px',left:'0px'});
             }
         });
     });
