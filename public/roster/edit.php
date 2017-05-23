@@ -164,7 +164,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
 
     function drop(ev, ui) {
         ev.preventDefault();
-
+        console.log(ev.target.getAttribute('id'));
         //Check it is not dropped on a shift
         if (ev.target.getAttribute('id') !== null) {
             //Get all the required data
