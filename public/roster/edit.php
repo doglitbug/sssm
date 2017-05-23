@@ -159,9 +159,8 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         $(".shift").draggable({
             containment: '#shifttable',
             cursor: 'move',
-            start: function (event, ui) {
-                //console.log("Source id: " + $(this).attr('id'));
-            }
+            zIndex: 100,
+            revert: "invalid"
         });
     });
 
@@ -172,9 +171,9 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                 var roster_id = ui.draggable.attr('id');
 
                 console.log("Roster id: " + roster_id);
-                console.log(event.target.id);
+                console.log("Target name: " + event.target.id);
 
-                ui.draggable.appendTo($(this)).css({top:'0px',left:'0px'});
+                ui.draggable.appendTo($(this)).css({top: '0px', left: '0px'});
             }
         });
     });
