@@ -84,7 +84,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                 for ($current_date = $start_date; $current_date <= $end_date; $current_date = strtotime("+1 days", $current_date)) {
                     //Create an id for this user/date combination
                     $id = $user['user_id'] . "-" . date("Y-m-d", $current_date);
-                    echo "<td id='$id' class='shifts' ondrop=\"drop(event, '$id')\" ondragover='allowDrop(event)'>";
+                    echo "<td id='$id' class='shifts'>";
                     $output = false;
                     //Date format as advised by RFC 3339/ISO 8601 "wire format": YYYY-MM-DD
                     while ($shift['start_date'] == date("Y-m-d", $current_date) && $shift['user_id'] == $user['user_id']) {
@@ -96,7 +96,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         //Build pretty card for shift
                         //echo "<a href='edit".$shift['roster_id']."'>";
                         //Enable draggable
-                        echo "<div draggable='true' ondragstart='drag(event)' class='shift ";
+                        echo "<div class='shift ";
                         //Randomly color a shift, yes lazy I know...
                         switch (rand(0, 3)) {
                             case 0:
@@ -132,7 +132,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         </tbody>
     </table>
 </div>
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     ////// Functions for adding new shifts
     //Attach click for adding a new shift
@@ -142,7 +142,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         var split = data.indexOf('-');
         var user_id = data.substring(0, split);
         var start_date = data.substring(split + 1);
-        alert("Add new shift for: "+user_id+" on "+start_date);
+        alert("Add new shift for: " + user_id + " on " + start_date);
     });
 
     //Attach click for editing a shift
@@ -153,6 +153,31 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         var roster_id = $(this).attr('id');
         alert("Edit shift :" + roster_id);
     });
+
+    //Enable dragging for all shifts
+    $(function () {
+        $(".shift").draggable({
+            containment: '#shifttable',
+            cursor: 'move',
+            start: function (event, ui) {
+                //console.log("Source id: " + $(this).attr('id'));
+            }
+        });
+    });
+
+    //Enable dropping for all shifts
+    $(function () {
+        $(".shifts").droppable({
+            drop: function (event, ui) {
+                console.log("Roster id: " + ui.draggable.attr('id'));
+                console.log($(this));
+                console.log(ui.draggable);
+                console.log(event.target);
+                ui.draggable.appendTo($(this));
+            }
+        });
+    });
+
     ////// Functions for moving shifts
     function allowDrop(ev) {
         ev.preventDefault();
@@ -166,6 +191,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         ev.preventDefault();
         console.log(ev.target.getAttribute('id'));
         //Check it is not dropped on a shift
+
         if (ev.target.getAttribute('id') !== null) {
             //Get all the required data
             var source_shift = ev.dataTransfer.getData("text");
