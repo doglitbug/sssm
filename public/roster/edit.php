@@ -1,5 +1,5 @@
 <?php
-$title = "View roster";
+$title = "Edit roster";
 $login = true;
 require_once('../scripts/header.php');
 
@@ -164,52 +164,55 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         });
     });
 
-    //Enable dropping for all shifts
+    //Enable dropping for all shift locations
     $(function () {
         $(".shifts").droppable({
-            drop: function (event, ui) {
-                //Get id of moved shift(same as in database)
-                var roster_id = ui.draggable.attr('id');
-
-                //Get all the required data
-                var target_location = event.target.id;
-
-                //Split up user_id and date of target
-                var split = target_location.indexOf('-');
-                var user_id = target_location.substring(0, split);
-                var start_date = target_location.substring(split + 1);
-
-                //Split up time and get start_time and end_time
-                var time = ui.draggable.children(".time").text();
-                var split = time.indexOf("-");
-                var start_time = time.substring(0, split - 1);//Adjust because divider is " - "
-                var end_time = time.substring(split + 2);//Adjust because divider is " - ";
-
-                var description = ui.draggable.children(".description").text();
-                //Lets use some jQuery here to move shift in database
-                //TODO use jQuery for everything...
-                $.getJSON({
-                    type: 'post',
-                    url: 'update.php',
-                    data: $.param({'roster_id': roster_id, 'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
-                    success: function (data, status, jqXHR) {
-                        if (data.success) {
-                            console.log(data.message);
-                            //Move shift into dropped position
-                            ui.draggable.appendTo(event.target).css({top: '0px', left: '0px'});
-                        } else {
-                            //TODO Deal with error
-                        }
-
-                    },
-                    error: function (data, status, headers, config) {
-                        //TODO Deal with serious error
-                    }});
-
-            }
+            drop: doDrop
         });
     });
 
+
+    //Action functions
+    function doDrop(event, ui) {
+        //Get id of moved shift(same as in database)
+        var roster_id = ui.draggable.attr('id');
+
+        //Get all the required data
+        var target_location = event.target.id;
+
+        //Split up user_id and date of target
+        var split = target_location.indexOf('-');
+        var user_id = target_location.substring(0, split);
+        var start_date = target_location.substring(split + 1);
+
+        //Split up time and get start_time and end_time
+        var time = ui.draggable.children(".time").text();
+        var split = time.indexOf("-");
+        var start_time = time.substring(0, split - 1);//Adjust because divider is " - "
+        var end_time = time.substring(split + 2);//Adjust because divider is " - ";
+
+        var description = ui.draggable.children(".description").text();
+        //Lets use some jQuery here to move shift in database
+        //TODO use jQuery for everything...
+        $.getJSON({
+            type: 'post',
+            url: 'update.php',
+            data: $.param({'roster_id': roster_id, 'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
+            success: function (data, status, jqXHR) {
+                if (data.success) {
+                    console.log(data.message);
+                    //Move shift into dropped position
+                    ui.draggable.appendTo(event.target).css({top: '0px', left: '0px'});
+                } else {
+                    //TODO Deal with error
+                }
+
+            },
+            error: function (data, status, headers, config) {
+                //TODO Deal with serious error
+            }});
+
+    }
 </script>
 <?php
 require_once('../scripts/footer.php');

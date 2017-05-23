@@ -93,7 +93,13 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         }
 
                         //Build pretty card for shift
-                        echo "<div class='shift'>";
+                        echo "<div class='shift ";
+                        if ($id==0){
+                            echo "alert-danger";
+                        } else {
+                            echo "alert-success";
+                        }
+                        echo "'>";
                         echo "<div class='title'>" . date("H:i", strtotime($shift['start_time'])) . "-" . date("H:i", strtotime($shift['end_time']));
 
                         echo "</div>";
