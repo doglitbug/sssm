@@ -22,7 +22,7 @@ $nextWeekStart = strtotime("+1 week", $start_date);
 //Format displayed date TODO Use nice google calendar format?
 $pretty_date = date("d-m-Y", $start_date);
 
-echo "<h1>View roster for week starting $pretty_date</h1>\n";
+echo "<h1>Edit roster for week starting $pretty_date</h1>\n";
 ?>
 <div class="well well-sm">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
@@ -205,11 +205,17 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                     ui.draggable.appendTo(event.target).css({top: '0px', left: '0px'});
                 } else {
                     //TODO Deal with error
+                    console.log("Error: " + data.message);
+                    //Move dragged shift back to the original position
+                    ui.draggable.animate({top: 0, left: 0}, 'slow');
                 }
 
             },
             error: function (data, status, headers, config) {
                 //TODO Deal with serious error
+                console.log("Serious error: " + data.message);
+                //Move dragged shift back to the original position
+                ui.draggable.animate({top: 0, left: 0}, 'slow');
             }});
 
     }

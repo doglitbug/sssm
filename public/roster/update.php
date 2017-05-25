@@ -1,8 +1,17 @@
 <?php
 
 require_once('../scripts/databaseconnection.php');
+require_once('../scripts/startsession.php');
+require_once('../scripts/sharedFunctions.php');
 
 try {
+    //Check that a manager is doing this(also checks log in)
+    if(!isLoggedIn()){
+        throw new Exception("Not logged in");
+    }
+    if(!isManager()){
+        throw new Exception("Manager access required");
+    }
     //Grab all post data
     $data = array();
     $roster_id = mysqli_real_escape_string($dbc, isset($_POST['roster_id']) ? trim($_POST['roster_id']) : '');
