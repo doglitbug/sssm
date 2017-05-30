@@ -83,9 +83,7 @@ echo "<h1>View schedule for $user, week starting $pretty_date</h1>\n";
                 //Display a search box for all users
                 $query = "SELECT CONCAT(firstname,' ',lastname) AS name, username, user_id from tbl_user";
                 $result = mysqli_query($dbc, $query) or die('Error getting list of all staff: ' . mysqli_error($dbc));
-                ?>    
 
-                <?php
                 echo "<select name='user_id'>\n";
                 while ($row = mysqli_fetch_array($result)) {
                     echo "<option value='" . $row['user_id'] . "'";
