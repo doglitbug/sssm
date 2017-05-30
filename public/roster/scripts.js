@@ -82,6 +82,6 @@ function doDrop(event, ui) {
         }});
 
 }
-function updateShift(roster_id, user_id, start_date, start_time, end_time, description){
+function doAlert(message, severity){
     
 }

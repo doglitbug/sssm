@@ -60,8 +60,9 @@ require_once('../scripts/header.php');
                 </div>
 
                 <div class="col-md-3">
-                    <label for="start_date">Date:</label>
-                    <input type="text" id="start_date">
+                    <label for="datepicker">Date:</label>
+                    <input type="text" id="datepicker">
+                    <input type="hidden" id="start_date">
                 </div>
                 <div class="col-md-3">
                     <label for="start_time">at</label>
@@ -133,40 +134,57 @@ require_once('../scripts/header.php');
 
     // Submitting the form
     $("#addShift").submit(function (event) {
+        event.preventDefault();
         //Get form data
         var user_id = $("#user_id option:selected").val();
         var start_date = $("#start_date").val();
         var start_time = $("#start_time").val();
         var end_time = $("#end_time").val();
         var description = $("#description").val();
-        
-        console.log(user_id);
-        console.log(start_date);
-        console.log(start_time);        
-        console.log(end_time);
-        console.log(description);
-        
-        //Show the user an alert
-        //Craft alert
-        var alert = $("<div class='alert alert-success'>Something happened that was good</div>");
-        setTimeout(function() {
-            alert.remove();
-        }, 5000);
-        
-        $("#alerts").append(alert);
-        event.preventDefault();
+
+        //Use jQuery here to add shift in database
+        $.getJSON({
+            type: 'post',
+            url: 'add.php',
+            data: $.param({'user_id': user_id, 'start_date': start_date, 'start_time': start_time, 'end_time': end_time, 'description': description}),
+            success: function (data, status, jqXHR) {
+                if (data.success) {
+                    doAlert(data.message, "success");
+                } else {
+                    doAlert(data.message, "warning");
+                }
+            },
+            error: function (data, status, headers, config) {
+                doAlert(data.message, "danger");
+            }});
     });
-//TODO remove, this shows how to change tabs programatically
+    //TODO remove, this shows how to change tabs programatically
     $(document).on("click", "button", function (event) {
         $("#tabs").tabs("option", "active", 1);
     });
 
     //Add in a datepicker
-    $("#start_date").datepicker({dateFormat: "dd/mm/yy"});
+    $("#datepicker").datepicker({dateFormat: "dd-mm-yy",
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        altField: "#start_date",
+        altFormat: "yy-mm-dd"});
     //Pre populate the date field
     //TODO set this to shift info...
-    $("#start_date").datepicker("setDate", new Date());
+    $("#datepicker").datepicker("setDate", new Date());
 
+
+    function doAlert(message, level) {
+        console.log(message);
+        //Craft alert
+        var contents = "<div class='alert alert-"+level+">"+message+"</div>";
+        var alert = $("<div class='alert alert-"+level+"'>"+message+"</div>");
+        setTimeout(function () {
+            alert.remove();
+        }, 5000);
+
+        $("#alerts").append(alert);
+    }
 </script>
 <?php
 require_once('../scripts/footer.php');
