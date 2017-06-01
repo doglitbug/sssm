@@ -82,6 +82,48 @@ function doDrop(event, ui) {
         }});
 
 }
-function doAlert(message, severity){
-    
+
+function doAlert(message, level) {
+    console.log(message);
+    //Craft alert
+    var alert = $("<div class='alert alert-" + level + "'>" + message + "</div>");
+    setTimeout(function () {
+        alert.remove();
+    }, 5000);
+
+    $("#alerts").append(alert);
+}
+
+////// Deleting shifts
+//Attach click for editing a shift
+$(document).on("click", ".delete", deleteShift);
+
+function deleteShift(event, ui) {
+    //Stop the add new shift part
+    event.stopPropagation();
+    //Get the id of the shift to delete(same as in database
+    var shift = $(this).parent();
+    var roster_id = shift.attr('id');
+
+    var confirmIt = confirm("Do you wish to delete this shift? This action can not be undone");
+    if (confirmIt === true) {
+        //Generate Ajax request
+        //Use jQuery here to delete shift in database
+        $.getJSON({
+            type: 'post',
+            url: 'delete.php',
+            data: $.param({'roster_id': roster_id}),
+            success: function (data, status, jqXHR) {
+                if (data.success) {
+                    doAlert(data.message, "success");
+                    //Remove shift from page
+                    shift.remove();
+                } else {
+                    doAlert(data.message, "warning");
+                }
+            },
+            error: function (data, status, headers, config) {
+                doAlert(data.message, "danger");
+            }});
+    }
 }

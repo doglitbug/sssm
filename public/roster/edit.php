@@ -114,6 +114,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
                         }
                         echo "' id='" . $shift['roster_id'] . "'>";
 
+                        echo "<div class='delete'><button><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></div>";
                         echo "<div class='time'>" . date("H:i", strtotime($shift['start_time'])) . " - " . date("H:i", strtotime($shift['end_time'])) . "</div>";
                         echo "<div class='description'>" . $shift['description'] . "</div>";
                         //Add other data such as location or total hours?
@@ -132,6 +133,7 @@ while ($user = mysqli_fetch_assoc($userResults)) {
         </tbody>
     </table>
 </div>
+<div class="col-md-12" id="alerts"></div>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="scripts.js"></script>
 <?php
